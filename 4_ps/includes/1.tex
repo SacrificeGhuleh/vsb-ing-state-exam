@@ -1,175 +1,175 @@
-\subsection{Architektura mikroprocesorů}
+\section{Architektura mikroprocesorů}
 \textbf{Architektura procesoru} je náčrt struktury a funkčnosti systému. Je charakterizována výčtem \textbf{registrů} a jejich funkcí, vnitřních a vnějších \textbf{sběrnic}, způsobem \textbf{adresování} a \textbf{instrukčním souborem}.
 
 \textbf{Registr} je malé úložiště dat v mikroprocesoru s rychlým přístupem, které slouží jako \textbf{pracovní paměť} během výpočtů.
 
 \textbf{Sběrnice} je soustava vodičů pro \textbf{přenos informací} mezi více účastníky na principu \uv{jeden vysílá, ostatní přijímájí.} Podle typu přenášené informace je dělíme na \textit{datové}, \textit{adresové} a \textit{řídící}. V praxi však díky multiplexu může jít o jedny dráty.
 
-\subsection{Procesory CISC a RISC}
+\section{Procesory CISC a RISC}
 V dnešní době se ustálilo dělení počítačů do dvou základních kategorií podle typu používaného procesoru:
 \begin{itemize}
-	\item{\textbf{CISC} -- počítač se složitým souborem instrukcí (\textit{Complex Instruction Set Computer})}
-	\item{\textbf{RISC} -- počítač s redukovaným souborem instrukcí (\textit{Reduced Instruction Set Computer})}
+    \item{\textbf{CISC} -- počítač se složitým souborem instrukcí (\textit{Complex Instruction Set Computer})}
+    \item{\textbf{RISC} -- počítač s redukovaným souborem instrukcí (\textit{Reduced Instruction Set Computer})}
 \end{itemize}
 
-\subsubsection{CISC}
+\subsection{CISC}
 \begin{itemize}
-	\item Procesory s \textbf{komplexním instrukčním souborem}.
-	\item Instrukce mají \textbf{proměnlivou délku} i \textbf{dobu vykonání}.
-	\item \textbf{Vysoká složitost instrukcí} $\,\to\,$ nutný systematický návrh řadiče procesoru.
-	\item Vykonání strojové instrukce probíhá posloupností mikrooperací (předepsána mikroinstrukcí v řídící paměti).
-	\item Procesor obsahuje relativně \textbf{nízký počet registrů}.
-	\item Operace provedená i \textbf{složenou instrukcí} (např. násobení) může být \textbf{nahrazena} sledem jednodušších strojových instrukcí (\textit{sčítání a bitové posuny}) $\,\to\,$ mohou být ve výsledu vykonány rychleji, než hardwarově implementovaná složená varianta.
-	\item {Označení \textbf{CISC} bylo zavedeno jako \textbf{protiklad} až poté, co se prosadily procesory RISC, které mají instruční sadu naopak maximálně redukovanou (pouze jednoduché operace, tj. žádné složené, jsou stejně dlouhé a jejich vykonání trvá stejnou dobu).}
-	\item {Obvyklou chybou je domněnka, že procesory CISC mají více strojových instrukcí, než procesory RISC. Ve skutečnosti nejde o absolutní počet, ale o \textbf{počet různých druhů operací}, které procesor sám přímo umí vykonat na hardwarové úrovni (tj. již z výroby). Procesor CISC tak může například paradoxně obsahovat jen jednu strojovou instrukci pro danou operaci (např. \textit{logické operace}), zatímco procesor RISC může tuto operaci obsahovat jako několik strojových instrukcí, které stejnou operaci umí provést nad různými registry.}
+    \item Procesory s \textbf{komplexním instrukčním souborem}.
+    \item Instrukce mají \textbf{proměnlivou délku} i \textbf{dobu vykonání}.
+    \item \textbf{Vysoká složitost instrukcí} $\,\to\,$ nutný systematický návrh řadiče procesoru.
+    \item Vykonání strojové instrukce probíhá posloupností mikrooperací (předepsána mikroinstrukcí v řídící paměti).
+    \item Procesor obsahuje relativně \textbf{nízký počet registrů}.
+    \item Operace provedená i \textbf{složenou instrukcí} (např. násobení) může být \textbf{nahrazena} sledem jednodušších strojových instrukcí (\textit{sčítání a bitové posuny}) $\,\to\,$ mohou být ve výsledu vykonány rychleji, než hardwarově implementovaná složená varianta.
+    \item {Označení \textbf{CISC} bylo zavedeno jako \textbf{protiklad} až poté, co se prosadily procesory RISC, které mají instruční sadu naopak maximálně redukovanou (pouze jednoduché operace, tj. žádné složené, jsou stejně dlouhé a jejich vykonání trvá stejnou dobu).}
+    \item {Obvyklou chybou je domněnka, že procesory CISC mají více strojových instrukcí, než procesory RISC. Ve skutečnosti nejde o absolutní počet, ale o \textbf{počet různých druhů operací}, které procesor sám přímo umí vykonat na hardwarové úrovni (tj. již z výroby). Procesor CISC tak může například paradoxně obsahovat jen jednu strojovou instrukci pro danou operaci (např. \textit{logické operace}), zatímco procesor RISC může tuto operaci obsahovat jako několik strojových instrukcí, které stejnou operaci umí provést nad různými registry.}
 \end{itemize}
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{assets/1_cisc_sekv}
-\includegraphics[width=0.6\textwidth]{assets/1_cisc_instrukce}
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/1_cisc_sekv}
+    \includegraphics[width=0.6\textwidth]{assets/1_cisc_instrukce}
 \end{figure}
 
-\subsubsection{RISC}
+\subsection{RISC}
 \begin{itemize}
-\item {\textbf{Počet instrukcí a způsobů adresování je malý, ale zůstává úplný}, aby bylo možno provést vše $\,\to\,$ v tomhle se liší od CISC}.
-\item {Instrukce jsou vytvořeny pomocí obvodu $\,\to\,$ jednodušší na výrobu než CISC}.
-\item Je menší počet instrukcí, takže složitější instrukce se nahradí větším počtem jednodušších.
-\item To způsobuje nárust kódu. Zároveň ale vznikly rychlejší sběrnice, tj rychlejší proud dat do procesoru.
-\item {Používá se \textbf{zřetězené zpracování instrukcí} (Blíže popsáno níže)}. 
-\item {Instrukce se provádějí jen nad registry}.
-\item {Navýšený počet registrů $\,\to\,$ delší program}.
-\item {Instrukce mají \textbf{jednotný formát} -- délku i obsah}.
-\item {Komunikace s pamětí pouze pomocí instrukcí \textbf{LOAD / STORE}, adresování i práce je celkově rychlejší}.
-\item V návaznosti je využívaná cache pro co nejrychlejší přístup dat.
-\item Využívá se \textbf{predikce skoků}, takže se začnou načítat data, která pravděpodobně budou v další instrukci potřeba.
-\item {\textbf{Každý strojový cyklus znamená dokončení jedné instrukce}}.
-\item {Řešení problémů s frontou instrukcí}.
-\item {Mikroprogramový řadič může být nahrazen rychlejším obvodem}.
-\item {Představitelé \textbf{ARM, MOTOROLA 6800, INTEL i960, MIPS R6000}}.
+    \item {\textbf{Počet instrukcí a způsobů adresování je malý, ale zůstává úplný}, aby bylo možno provést vše $\,\to\,$ v tomhle se liší od CISC}.
+    \item {Instrukce jsou vytvořeny pomocí obvodu $\,\to\,$ jednodušší na výrobu než CISC}.
+    \item Je menší počet instrukcí, takže složitější instrukce se nahradí větším počtem jednodušších.
+    \item To způsobuje nárust kódu. Zároveň ale vznikly rychlejší sběrnice, tj rychlejší proud dat do procesoru.
+    \item {Používá se \textbf{zřetězené zpracování instrukcí} (Blíže popsáno níže)}.
+    \item {Instrukce se provádějí jen nad registry}.
+    \item {Navýšený počet registrů $\,\to\,$ delší program}.
+    \item {Instrukce mají \textbf{jednotný formát} -- délku i obsah}.
+    \item {Komunikace s pamětí pouze pomocí instrukcí \textbf{LOAD / STORE}, adresování i práce je celkově rychlejší}.
+    \item V návaznosti je využívaná cache pro co nejrychlejší přístup dat.
+    \item Využívá se \textbf{predikce skoků}, takže se začnou načítat data, která pravděpodobně budou v další instrukci potřeba.
+    \item {\textbf{Každý strojový cyklus znamená dokončení jedné instrukce}}.
+    \item {Řešení problémů s frontou instrukcí}.
+    \item {Mikroprogramový řadič může být nahrazen rychlejším obvodem}.
+    \item {Představitelé \textbf{ARM, MOTOROLA 6800, INTEL i960, MIPS R6000}}.
 \end{itemize}
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{assets/1_risc_zretezeni}
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/1_risc_zretezeni}
 \end{figure}
 
-\subsection{Von Neumannovo schéma počítače}
+\section{Von Neumannovo schéma počítače}
 
 John Von Neumann definoval v roce \textbf{1945} základní koncepci počítače (EDVAC) \textbf{řízeného obsahem paměti}. Od té doby se objevilo několik odlišných modifikací, ale v podstatě se \textbf{počítače v dnešní době} konstruují podle tohoto modelu. Ve svém projektu si von Neumann stanovil určitá kritéria a principy, které musí počítač splňovat, aby byl použitelný univerzálně. Můžeme je ve stručnosti shrnout do následujících bodů:
 \begin{itemize}
-\item Počítač se skládá z paměti, řídící jednotky, aritmeticko--logické jednotky, vstupní a  výstupní jednotky.
-\begin{enumerate}
-\item \textbf{ALU} -- aritmeticko-logická jednotka (aritmetic-logic unit) => jednotka provádějící veškeré aritmetické výpočty a logické operace. Obsahuje sčítačky, násobičky a komparátory.
-\item  \textbf{Operační paměť} -- slouží k uchování zpracovávaného programu, zpracovávaných dat a výsledků výpočtu.
-\item \textbf{Řídící jednotka} -- řídí činnost všech částí počítače. Toto řízení je prováděno pomocí řídících signálů, které jsou zasílány jednotlivým modulům. Řadiči jsou pak zpět zasílané stavové hlášení. Dnes řadič spolu s ALU tvoří jednu součástku, a to procesor neboli CPU (Central Processing Unit).
-\item \textbf{Vstup/Výstup} -- zařízení určené pro vstup dat, a výstup zpracovaných výsledků.
-\end{enumerate}
-\item Struktura pc je \textbf{nezávislá na typu řešené úlohy} (univerzálnost), \textbf{počítač se programuje obsahem paměti}.
-\item Následující krok počítače je závislý na kroku předešlém.
-\item \textbf{Instrukce} a \textbf{data} jsou v téže paměti.
-\item Paměť je rozdělena do \textbf{paměťových buněk stejné velikosti (Byte)}, jejichž pořadová čísla se využívají jako adresy.
-\item Program je tvořen posloupností instrukcí, které se vykonávají jednotlivě v pořadí, v jakém jsou zapsány do paměti.
-\item Změna pořadí prováděných instrukcí se provádí \textbf{skokovými instrukcemi} (podmíněné nebo nepodmíněné skákání na adresy). 
-\item Čísla, instrukce, adresy a znaky se značí v \textbf{binární soustavě}.
+    \item Počítač se skládá z paměti, řídící jednotky, aritmeticko--logické jednotky, vstupní a  výstupní jednotky.
+          \begin{enumerate}
+              \item \textbf{ALU} -- aritmeticko-logická jednotka (aritmetic-logic unit) => jednotka provádějící veškeré aritmetické výpočty a logické operace. Obsahuje sčítačky, násobičky a komparátory.
+              \item  \textbf{Operační paměť} -- slouží k uchování zpracovávaného programu, zpracovávaných dat a výsledků výpočtu.
+              \item \textbf{Řídící jednotka} -- řídí činnost všech částí počítače. Toto řízení je prováděno pomocí řídících signálů, které jsou zasílány jednotlivým modulům. Řadiči jsou pak zpět zasílané stavové hlášení. Dnes řadič spolu s ALU tvoří jednu součástku, a to procesor neboli CPU (Central Processing Unit).
+              \item \textbf{Vstup/Výstup} -- zařízení určené pro vstup dat, a výstup zpracovaných výsledků.
+          \end{enumerate}
+    \item Struktura pc je \textbf{nezávislá na typu řešené úlohy} (univerzálnost), \textbf{počítač se programuje obsahem paměti}.
+    \item Následující krok počítače je závislý na kroku předešlém.
+    \item \textbf{Instrukce} a \textbf{data} jsou v téže paměti.
+    \item Paměť je rozdělena do \textbf{paměťových buněk stejné velikosti (Byte)}, jejichž pořadová čísla se využívají jako adresy.
+    \item Program je tvořen posloupností instrukcí, které se vykonávají jednotlivě v pořadí, v jakém jsou zapsány do paměti.
+    \item Změna pořadí prováděných instrukcí se provádí \textbf{skokovými instrukcemi} (podmíněné nebo nepodmíněné skákání na adresy).
+    \item Čísla, instrukce, adresy a znaky se značí v \textbf{binární soustavě}.
 \end{itemize}
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{assets/1_vonNeumann}
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/1_vonNeumann}
 \end{figure}
 
-\subsubsection{Nevýhody Von Neumannovy koncepce ve srovnání s dnešními PC}
+\subsection{Nevýhody Von Neumannovy koncepce ve srovnání s dnešními PC}
 \begin{itemize}
-\item Podle von Neumannova schématu počítač pracuje \textbf{vždy nad jedním programem}. Toto vede k velmi špatnému využití strojového času. Dnes je obvyklé, že počítač \textbf{zpracovává paralelně více programů} zároveň - tzv. \textbf{multitasking}.
-\item Počítač může mít i více jak jeden procesor.
-\item Podle Von Neumanova schématu mohl počítač pracovat pouze v tzv. \textbf{diskrétním režimu}, kdy byl do paměti počítače zaveden program, data a pak probíhal výpočet. V průběhu výpočtu již nebylo možné s počítačem dále interaktivně komunikovat.
-\item Dnes existují \textbf{vstupní/výstupní} zařízení, např. pevné disky a páskové mechaniky, které umožňují vstup i výstup.
-\item Program se do paměti nemusí zavést celý, ale je možné zavést pouze jeho část a ostatní části zavádět až v případě potřeby.
+    \item Podle von Neumannova schématu počítač pracuje \textbf{vždy nad jedním programem}. Toto vede k velmi špatnému využití strojového času. Dnes je obvyklé, že počítač \textbf{zpracovává paralelně více programů} zároveň - tzv. \textbf{multitasking}.
+    \item Počítač může mít i více jak jeden procesor.
+    \item Podle Von Neumanova schématu mohl počítač pracovat pouze v tzv. \textbf{diskrétním režimu}, kdy byl do paměti počítače zaveden program, data a pak probíhal výpočet. V průběhu výpočtu již nebylo možné s počítačem dále interaktivně komunikovat.
+    \item Dnes existují \textbf{vstupní/výstupní} zařízení, např. pevné disky a páskové mechaniky, které umožňují vstup i výstup.
+    \item Program se do paměti nemusí zavést celý, ale je možné zavést pouze jeho část a ostatní části zavádět až v případě potřeby.
 \end{itemize}
 
 \noindent\makebox[\textwidth]{\includegraphics[width=8cm]{assets/1_neuman2}}
 
-\subsubsection*{Výhody}
+\subsection*{Výhody}
 \begin{itemize}
-	\item[$+$] \textbf{Rozdělení paměti} pro kód a data určuje programátor, řídící jednotka přistupuje pro  data i instrukce jednotným způsobem.
-	\item[$+$] \textbf{Jedna sběrnice} ->  jednodušší levnější výroba.
+    \item[$+$] \textbf{Rozdělení paměti} pro kód a data určuje programátor, řídící jednotka přistupuje pro  data i instrukce jednotným způsobem.
+    \item[$+$] \textbf{Jedna sběrnice} ->  jednodušší levnější výroba.
 \end{itemize}
-\subsubsection*{Nevýhody}
+\subsection*{Nevýhody}
 \begin{itemize}
-	\item[$-$] \textbf{Společné uložení dat a kódu} může mít za následek přepsání vlastního programu.
-	
-	\item[$-$] \textbf{Jedna sběrnice} je omezující.
+    \item[$-$] \textbf{Společné uložení dat a kódu} může mít za následek přepsání vlastního programu.
+
+    \item[$-$] \textbf{Jedna sběrnice} je omezující.
 \end{itemize}
 
-\subsection{Hardvardské schéma počítače}
+\section{Hardvardské schéma počítače}
 Několik let po von Neumannovi, přišel vývojový tým odborníků z Harvardské univerzity s vlastní koncepcí počítače, která se sice od Neumannovy příliš nelišila, ale odstraňovala některé její nedostatky. V podstatě jde pouze o \textbf{oddělení paměti pro data a program}. Abychom si mohli obě koncepce porovnat, můžeme vycházet ze zjednodušených schémat.
 \newline
 
 \noindent\makebox[\textwidth]{\includegraphics[width=8cm]{assets/1_harvard}}
 
-\subsubsection*{Výhody}
+\subsection*{Výhody}
 \begin{itemize}
-	\item[$+$]\textbf{Program se nepřepíše} (oddělené paměti pro data a program).
-	\item[$+$]Dvě sběrnice umožňují \textbf{paralelní} načítání instrukcí a dat.
-	\item[$+$]Paměti mohou být vyrobeny \textbf{odlišnými technologiemi }a každá může mít jinou nejmenší adresovací jednotku (8 bitů pro instrukce a 8, 16 nebo 32 pro data).
+    \item[$+$]\textbf{Program se nepřepíše} (oddělené paměti pro data a program).
+    \item[$+$]Dvě sběrnice umožňují \textbf{paralelní} načítání instrukcí a dat.
+    \item[$+$]Paměti mohou být vyrobeny \textbf{odlišnými technologiemi }a každá může mít jinou nejmenší adresovací jednotku (8 bitů pro instrukce a 8, 16 nebo 32 pro data).
 \end{itemize}
 
 
-\subsubsection*{Nevýhody}
+\subsection*{Nevýhody}
 \begin{itemize}
-\item[$-$]2 sběrnice mají \textbf{vyšší nároky na vývoj} řídící jednotky a jsou také dražší a složitější na výrobu.
-\item[$-$]Paměť je \textbf{rozdělena} už od \textbf{výrobce}.
-\item[$-$]Nevyužitou část dat \textbf{nelze využít }po program a obráceně.
+    \item[$-$]2 sběrnice mají \textbf{vyšší nároky na vývoj} řídící jednotky a jsou také dražší a složitější na výrobu.
+    \item[$-$]Paměť je \textbf{rozdělena} už od \textbf{výrobce}.
+    \item[$-$]Nevyužitou část dat \textbf{nelze využít }po program a obráceně.
 \end{itemize}
 
 \pagebreak
-\subsection{Principy urychlování činnosti procesorů}
+\section{Principy urychlování činnosti procesorů}
 \begin{itemize}
-	\item{Speciální kódování dle potřeby dané úlohy}.
-	\item{Speciální výpočetní jednotky dle potřeby dané úlohy (FFT -- rychlá fourierova transformace)}.
-	\item{Paralelní zpracování (násobné výpočetní jednotky)}.
-	\item{\textbf{Zřetězové zpracování instrukcí} (pipelining)}.
-	\item{Využití cache pamětí (L1, L2, L3)}.
-	\item{Predikce skoků}
+    \item{Speciální kódování dle potřeby dané úlohy}.
+    \item{Speciální výpočetní jednotky dle potřeby dané úlohy (FFT -- rychlá fourierova transformace)}.
+    \item{Paralelní zpracování (násobné výpočetní jednotky)}.
+    \item{\textbf{Zřetězové zpracování instrukcí} (pipelining)}.
+    \item{Využití cache pamětí (L1, L2, L3)}.
+    \item{Predikce skoků}
 \end{itemize}
-\subsubsection{Paralelní zpracování}
+\subsection{Paralelní zpracování}
 Zpracování více elementárních úloh běží součastně.
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.6\textwidth]{assets/1_paralelni_zpracovani.png}
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/1_paralelni_zpracovani.png}
 \end{figure}
 
-\subsubsection{Zřetězené zpracování instrukcí (pipelining)}
+\subsection{Zřetězené zpracování instrukcí (pipelining)}
 Princip zřetězení se značně překrývá s principy procesorů RISC.
-%\subsection{Problémy zřetězeného zpracování}
- Základní myšlenkou je \textbf{rozdělení zpracování jedné instrukce} mezi různé části procesoru a tím i dosažení možnosti \textbf{zpracovávat} \textbf{více instrukcí }najednou. Pro dosažení tohoto zřetězení je nutné rozdělit úlohu do posloupnosti dílčích úloh, z nichž každá může být vykonána \textbf{samostatně}, např. oddělit načítaní a ukládání dat z paměti od provádění výpočtu instrukce a tyto části pak mohou běžet souběžně. To znamená že musíme osamostatnit jednotlivé části sekvenčního obvodu tak, aby každému obvodu odpovídala jedna fáze zpracování instrukcí. Všechny fáze musí být \textbf{stejně časově náročné}, jinak je rychlost \textbf{degradována} na nejpomalejší z nich. Fáze zpracování je rozdělena minimálně na 2 úseky:
+%\section{Problémy zřetězeného zpracování}
+Základní myšlenkou je \textbf{rozdělení zpracování jedné instrukce} mezi různé části procesoru a tím i dosažení možnosti \textbf{zpracovávat} \textbf{více instrukcí }najednou. Pro dosažení tohoto zřetězení je nutné rozdělit úlohu do posloupnosti dílčích úloh, z nichž každá může být vykonána \textbf{samostatně}, např. oddělit načítaní a ukládání dat z paměti od provádění výpočtu instrukce a tyto části pak mohou běžet souběžně. To znamená že musíme osamostatnit jednotlivé části sekvenčního obvodu tak, aby každému obvodu odpovídala jedna fáze zpracování instrukcí. Všechny fáze musí být \textbf{stejně časově náročné}, jinak je rychlost \textbf{degradována} na nejpomalejší z nich. Fáze zpracování je rozdělena minimálně na 2 úseky:
 \begin{itemize}
-\item \textbf{Načtení} a \textbf{dekódování} instrukce.
-\item \textbf{Provedení} instrukce a případné uložení výsledku.
+    \item \textbf{Načtení} a \textbf{dekódování} instrukce.
+    \item \textbf{Provedení} instrukce a případné uložení výsledku.
 \end{itemize}
 Zřetězení se stále vylepšuje a u novějších procesorů se již můžeme setkat stále s více řetězci rozpracovaných informací (více pipelines), dnes je standardem 5 pipelines.
 
-\subsubsection{Problém a predikce skoků}
+\subsection{Problém a predikce skoků}
 Největší problém spočívá v \textbf{plnění zřetězené jednotky}, hlavně při provádění \textbf{podmíněných skoků}, kdy během stejného počtu cyklů se vykoná více instrukcí. U pipelingu se instrukce následující po skoku vyzvedává dřív, než je skok dokončen. \textbf{Primitivní implementace} vyzvedává vždy \textbf{následující instrukci}, což vede k tomu, že se vždy mýlí, pokud je skok nepodmíněný. Pozdější implementace mají \textbf{jednotku předpovídání skoku (1bit)}, která vždy správně \textbf{předpoví nepodmíněný skok} a s použitím cache se záznamem předchozího chování programu se pokusí předpovědět i cíl podmíněných skoků nebo skoků s adresou v registru nebo paměť. V případě, že se predikce nepovede, bývá nutné vyprázdnit celou pipeline a začít vyzvedávat instrukce ze správné adresy, což znamená relativně \textbf{velké zdržení}. Související problémem je přerušení.
 
-\subsubsection{Plnění fronty instrukcí}
+\subsection{Plnění fronty instrukcí}
 Pokud se dokončí skoková instrukce, která odkazuje na jinou část kódu, musejí být instrukce za ní zahozeny (\textit{problém plnění fronty instrukcí}).
 \begin{itemize}
-	\item{U malého zřetězení \textbf{neřešíme}}.
-	\item{Používání bublin na vyprázdnění pipeline, \textbf{naplněníní prázdnými instrukcemi}}.
-	\item{\textbf{Predikce skoku} -- vyhrazen jeden bit předurčující, zda se skok provede či nikoliv}.
+    \item{U malého zřetězení \textbf{neřešíme}}.
+    \item{Používání bublin na vyprázdnění pipeline, \textbf{naplněníní prázdnými instrukcemi}}.
+    \item{\textbf{Predikce skoku} -- vyhrazen jeden bit předurčující, zda se skok provede či nikoliv}.
 \end{itemize}
 \begin{itemize}
-	\item{\textbf{Statická} -- součást instrukce $\,\to\,$ řeší programátor nebo kompilátor}
-	\item{\textbf{Dynamická} 
-			\begin{itemize}
-					\item{\textbf{jednobitová} -- zaznamenává jestli se skok provedl, či ne (1/ 0)}
-					\item{\textbf{dvoubitová} -- metoda zpožděného skoku $\,\to\,$ v procesoru řeší se např. tabulkou s 4 kB instrukcí}
-			\end{itemize}
-		}
+    \item{\textbf{Statická} -- součást instrukce $\,\to\,$ řeší programátor nebo kompilátor}
+    \item{\textbf{Dynamická}
+          \begin{itemize}
+              \item{\textbf{jednobitová} -- zaznamenává jestli se skok provedl, či ne (1/ 0)}
+              \item{\textbf{dvoubitová} -- metoda zpožděného skoku $\,\to\,$ v procesoru řeší se např. tabulkou s 4 kB instrukcí}
+          \end{itemize}
+          }
 \end{itemize}
 Zřetězené zpracování přináší urychlení výpočtu nejen v procesorech, ale i jiných číslicových obvodech (např. pro zpracování obrazu, bioinformatických dat apod.). Pokud použijeme zřetězené zpracování, musíme dodat řadu podpůrných obvodů a řešit řadu nových problémů. \textbf{Moderní procesory používají kromě zřetězení i další koncepty}:
 \begin{itemize}
-	\item{\textbf{Superskalární architektura} (zdvojení) -- když nastane podmíněný skok, začnou se vykonávat instrukce obou variant, nepotřebná část se pak zahodí. Tento způsob, pak vyžaduje vyřešit ukládání výsledku.}
-	\item{\textbf{VLIW procesory} (Very long instruction word) -- umožňuje instrukční paralelismus (vykonávání několik nezávislých instrukcí souběžně), velmi dlouhé instrukční pakety}.
-	\item{\textbf{Vektorové procesory} -- je navržený tak, aby dokázal vykonávat matematické operace nad celou množinou čísel v daném čase. Je opakem skalárního procesoru, který vykonává jednu operaci s jedním číslem v daném čase. }
-	\item{\textbf{Vícevláknové procesory} }
+    \item{\textbf{Superskalární architektura} (zdvojení) -- když nastane podmíněný skok, začnou se vykonávat instrukce obou variant, nepotřebná část se pak zahodí. Tento způsob, pak vyžaduje vyřešit ukládání výsledku.}
+    \item{\textbf{VLIW procesory} (Very long instruction word) -- umožňuje instrukční paralelismus (vykonávání několik nezávislých instrukcí souběžně), velmi dlouhé instrukční pakety}.
+    \item{\textbf{Vektorové procesory} -- je navržený tak, aby dokázal vykonávat matematické operace nad celou množinou čísel v daném čase. Je opakem skalárního procesoru, který vykonává jednu operaci s jedním číslem v daném čase. }
+    \item{\textbf{Vícevláknové procesory} }
 \end{itemize}

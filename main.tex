@@ -1,0 +1,236 @@
+\documentclass{book}
+\usepackage[czech]{babel}
+% \usepackage[utf8]{inputenc}
+\usepackage[useregional]{datetime2}
+%\usepackage[T1]{fontenc}
+\usepackage[a4paper, top=2cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+\usepackage[thinlines]{easytable}
+\usepackage{graphicx}
+\usepackage[ampersand]{easylist}
+\usepackage{changepage}
+\usepackage{float}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{latexsym}
+\usepackage[unicode=true]{hyperref}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{makecell}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{xevlna}
+
+\graphicspath{{./1_it_mpzz/}{./2_swi/}{./3_dais/}{./4_ps/}{./5_pgo/}}
+
+\renewcommand{\baselinestretch}{1.2} 
+\setitemize{itemsep=0pt}
+\setenumerate{itemsep=0pt}
+
+\newcommand{\hhline}{\Xhline{2\arrayrulewidth}}
+\newcommand{\resline}{\vspace{1.5mm}\hrule\vspace{1.5mm}}
+\setcounter{tocdepth}{0}
+
+\title{Otázky k SZZ\\ING 2021}
+\author{Richard Zvonek}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\part{Počítačová grafika a analýza obrazu}
+\chapter{Systémy barev v počítačové grafice, nelinearita grafického výstupu (gamma korekce), kompozice rastrových obrazů (alfa kanál), HDR.}
+\input{5_pgo/includes/1.tex}
+\clearpage
+
+\chapter{Afinní a projektivní prostor. Afinní a projektivní transformace a jejich matematický zápis. Modelovací a zobrazovací transformace v počítačové grafice.}
+\input{5_pgo/includes/2.tex}
+\clearpage
+
+\chapter{Metody získávání fotorealistických obrazů, rekurzivní sledování paprsku, radiometrie, zobrazovací rovnice, Monte Carlo přístupy ve výpočtu osvětlení, urychlovací metody.}
+\input{5_pgo/includes/6.tex}
+\clearpage
+
+\chapter{Standardní zobrazovací řetězec a realizace jeho jednotlivých kroků, modely osvětlení a stínovací algoritmy, řešení viditelnosti, možnosti výpočtu globálního osvětlení v reálném čase, stručná charakteristika standardu OpenGL.}
+\input{5_pgo/includes/5.tex}
+\clearpage
+
+\chapter{Komprese obrazu a videa, principy úprav obrazu v prostorové a frekvenční doméně.}
+\input{5_pgo/includes/7.tex}
+\clearpage
+
+\chapter{Základní metody úpravy a segmentace obrazu (filtrace, prahování, hrany, oblasti, rohy).}
+\input{5_pgo/includes/8.tex}
+\clearpage
+
+\chapter{Základní metody rozpoznávání objektů, příznakové rozpoznávání. Univerzální příznaky pro rozpoznávání (např. HOG), trénovací klasifikátory (např. SVM).}
+\input{5_pgo/includes/9.tex}
+\clearpage
+
+\chapter{Hluboké neuronové sítě (např. konvoluční, popis jednotlivých vrstev).}
+%\input{5_pgo/includes/9.tex}
+\clearpage
+
+\chapter{Rekonstrukce 3D objektů z 2D obrazů (základní principy).}
+%\input{5_pgo/includes/9.tex}
+\clearpage
+
+\part{Matematické základy informatiky}
+
+\chapter{Konečné automaty, regulární výrazy, uzávěrové vlastnosti třídy regulárních jazyků.}
+\input{1_it_mpzz/includes/1.tex}
+\clearpage
+
+\chapter{Bezkontextové gramatiky a jazyky. Zásobníkové automaty, jejich vztah k bezkontextovým gramatikám.}
+\input{1_it_mpzz/includes/2.tex}
+\clearpage
+
+\chapter{Matematické modely algoritmů -Turingovy stroje a stroje RAM. Složitost algoritmu, asymptotické odhady. Algoritmicky nerozhodnutelné problémy.}
+\input{1_it_mpzz/includes/3.tex}
+\clearpage
+
+\chapter{Třídy složitosti problémů. Třída PTIME a NPTIME, NP-úplné problémy.}
+\input{1_it_mpzz/includes/4.tex}
+\clearpage
+
+\chapter{Jazyk predikátové logiky prvního řádu. Práce s kvantifikátory a ekvivalentní transformace formulí.}
+\input{1_it_mpzz/includes/5.tex}
+\clearpage
+
+\chapter{Pojem relace, operace s relacemi, vlastnosti relací. Typy binárních relací. Relace ekvivalence a relace uspořádání.}
+\input{1_it_mpzz/includes/6.tex}
+\clearpage
+
+\chapter{Pojem operace a obecný pojem algebra. Algebry s jednou a dvěma binárními operacemi.}
+\input{1_it_mpzz/includes/7.tex}
+\clearpage
+
+\chapter{FCA – formální kontext, formální koncept, konceptuální svazy.}
+\input{1_it_mpzz/includes/8.tex}
+\clearpage
+
+\chapter{Asociační pravidla, hledání často se opakujících množin položek.}
+
+\chapter{Metrické a topologické prostory – metriky a podobnosti.}
+\input{1_it_mpzz/includes/9.tex}
+\clearpage
+
+\chapter{Shlukování.}
+\input{1_it_mpzz/includes/10.tex}
+\clearpage
+
+\chapter{Náhodná veličina. Základní typy náhodných veličin. Funkce určující rozdělení náhodných veličin.}
+\input{1_it_mpzz/includes/11.tex}
+\clearpage
+
+\chapter{Vybraná rozdělení diskrétní a spojité náhodné veličiny - binomické, hypergeometrické, negativně binomické, Poissonovo, exponenciální, Weibullovo, normální rozdělení.}
+\input{1_it_mpzz/includes/12.tex}
+\clearpage
+
+\chapter{Popisná statistika. Číselné charakteristiky a vizualizace kategoriálních a kvantitativních proměnných.}
+\input{1_it_mpzz/includes/13.tex}
+\clearpage
+
+\chapter{Metody statistické indukce. Intervalové odhady. Princip testování hypotéz.}
+\input{1_it_mpzz/includes/14.tex}
+\clearpage
+
+\part{Softwarové inženýrství}
+
+\chapter{Softwarový proces. Jeho definice, modely a úrovně vyspělosti.}
+\input{2_swi/includes/1.tex}
+\clearpage
+
+\chapter{Vymezení fáze „sběr a analýza požadavků“. Diagramy UML využité v dané fázi.}
+\input{2_swi/includes/2.tex}
+\clearpage
+
+\chapter{Vymezení fáze „Návrh“. Diagramy UML využité v dané fázi. Návrhové vzory – členění, popis a příklady. }
+\input{2_swi/includes/3.tex}
+\clearpage
+
+\chapter{Objektově orientované paradigma. Pojmy třída, objekt, rozhraní. Základní vlastnosti objektu a vztah ke třídě. Základní vztahy mezi třídami a rozhraními. Třídní vs. instanční vlastnosti.}
+\input{2_swi/includes/4.tex}
+\clearpage
+
+\chapter{Mapování UML diagramů na zdrojový kód.}
+\input{2_swi/includes/5.tex}
+\clearpage
+
+\chapter{Správa paměti(v jazycích C/C++, Java , C\#, Python), virtuální stroj, podpora paralelního zpracování a vlákna.}
+\input{2_swi/includes/6.tex}
+\clearpage
+
+\chapter{Zpracování chyb v moderních programovacích jazycích, princip datových proudů – pro vstup a výstup. Rozdíl mezi znakově a bytově orientovanými datovými proudy.}
+\input{2_swi/includes/7.tex}
+\clearpage
+
+\chapter{Jazyk UML – typy diagramů a jejich využití v rámci vývoje.}
+\input{2_swi/includes/8.tex}
+\clearpage
+
+\part{Databázové a informační systémy}
+
+\chapter{Modelování databázových systémů, konceptuální modelování, datová analýza, funkční analýza; nástroje a modely. }
+\input{3_dais/includes/1.tex}
+\clearpage
+
+\chapter{Relační datový model, SQL; funkční závislosti, dekompozice a normální formy.}
+\input{3_dais/includes/2.tex}
+\clearpage
+
+\chapter{Transakce, zotavení, log, ACID, operace COMMIT a ROLLBACK; problémy souběhu, řízení souběhu: zamykání, úroveň izolacev SQL.}
+\input{3_dais/includes/3.tex}
+\clearpage
+
+\chapter{Procedurální rozšíření SQL, PL/SQL, T-SQL, triggery, funkce, procedury, kurzory, hromadné operace.}
+\input{3_dais/includes/4.tex}
+\clearpage
+
+\chapter{Základní fyzická implementace databázových systémů: tabulky a indexy; plán vykonávání dotazů.}
+\input{3_dais/includes/5.tex}
+\clearpage
+
+\chapter{Objektově‐relační datový model a XML datový model: principy, dotazovací jazyky.}
+\input{3_dais/includes/6.tex}
+\clearpage
+
+\chapter{Datová vrstva informačního systému; existující API, rámce a implementace, bezpečnost; objektově-relační mapování.}
+\input{3_dais/includes/7.tex}
+\clearpage
+
+\chapter{Distribuované SŘBD, fragmentace a replikace.}
+\input{3_dais/includes/8.tex}
+\clearpage
+
+\part{Počítače a sítě}
+\chapter{Architektura univerzálních procesorů. Principy urychlování činnosti procesorů. }
+\input{4_ps/includes/1.tex}
+\clearpage
+
+\chapter{Základní vlastnosti monolitických počítačů a jejich typické integrované periférie. Možnosti použití. }
+\input{4_ps/includes/2.tex}
+\clearpage
+
+\chapter{Protokolová rodina TCP/IP. }
+\input{4_ps/includes/4.tex}
+\clearpage
+
+\chapter{Metody sdíleného přístupu ke společnému kanálu. }
+\input{4_ps/includes/5.tex}
+\clearpage
+
+\chapter{Problémy směrování v počítačových sítích. Adresování v IP, překlad adres (NAT). }
+\input{4_ps/includes/6.tex}
+\clearpage
+
+\chapter{Bezpečnost počítačových sítí s TCP/IP: útoky, paketové filtry, stavový firewall. Šifrování a autentizace, virtuální privátní sítě.  }
+\input{4_ps/includes/7.tex}
+\clearpage
+
+\end{document}

@@ -1,25 +1,25 @@
-\textbf{Výjimky} představují určité situace, ve kterých musí být \textbf{výpočet přerušen} a řízení předáno na místo, kde bude provedeno ošetření výjimky a rozhodnutí o dalším pokračování výpočtu. Starší programovací jazyky pro ošetření chyb během výpočtu obvykle žádnou podporu neměly. U všech funkcí, které mohly objevit chybu, bylo třeba stále testovat různé příznaky a speciální návratové hodnoty, kterými se chyba oznamovala, a v případě, že jsme na testování chyby zapomněli, program běžel dál a na chybu v nejlepším případě nereagoval nebo se zhroutil na zcela jiném místě, kde již bylo obtížné zdroj chyby dohledat. 
+\textbf{Výjimky} představují určité situace, ve kterých musí být \textbf{výpočet přerušen} a řízení předáno na místo, kde bude provedeno ošetření výjimky a rozhodnutí o dalším pokračování výpočtu. Starší programovací jazyky pro ošetření chyb během výpočtu obvykle žádnou podporu neměly. U všech funkcí, které mohly objevit chybu, bylo třeba stále testovat různé příznaky a speciální návratové hodnoty, kterými se chyba oznamovala, a v případě, že jsme na testování chyby zapomněli, program běžel dál a na chybu v nejlepším případě nereagoval nebo se zhroutil na zcela jiném místě, kde již bylo obtížné zdroj chyby dohledat.
 
 Jazyk Java, podobně jako např. C++, využívá pro ošetření výjimek metodu strukturované obsluhy. To znamená, že programátor může pro konkrétní úsek programu specifikovat, \textbf{jakým způsobem se má konkrétní typ výjimky ošetřit}. V případě, že výjimka nastane, vyhledá se vždy nejbližší nadřazený blok, ve kterém je výjimka ošetřena.
 
-\subsection{Java}
+\section{Java}
 Výjimky jsou v jazyce Java reprezentovány jako objekty. Tyto objekty jsou instancemi tříd odvozených obecně od třídy \textbf{Throwable} se dvěma podtřídami \textbf{Error} a \textbf{Exception}:
 \begin{itemize}
-\item \textbf{Error} -- tyto výjimky představují vážný problém v činnosti aplikace a programátor by je \textbf{neměl zachytávat} (nedostatech zdrojů pro práci virtuálního stroje, přetečení zásobníku, nenalezení potřebné třídy při classloadingu) -- \textbf{unchecked}.
-\item \textbf{Exception} -- ošetření těchto výjimek má smysl. Jde například o výjimky jako pokus o otevření neexistujícího souboru, chybný formát čísla, dělení nulou apod. Do této skupiny by měly patřit také veškeré výjimky \textbf{definované uživatelem}. Jedná se o \textbf{checked} exceptions -- kompilátor kontroluje zda jsou ošetřeny při kompilaci.
-\item \textbf{RuntimeException} -- potomek třídy \texttt{Exception}, značí obvyklé chyby, které \textbf{způsobil sám programátor} (neplatný index pole, volání nad nullovým ukazatelem). Jedná se o tzv. \textbf{unchecked} exceptions, tedy není při kompilaci kontrolováno zda jsou zachytávány \texttt{catch}, \texttt{throws}.
+    \item \textbf{Error} -- tyto výjimky představují vážný problém v činnosti aplikace a programátor by je \textbf{neměl zachytávat} (nedostatech zdrojů pro práci virtuálního stroje, přetečení zásobníku, nenalezení potřebné třídy při classloadingu) -- \textbf{unchecked}.
+    \item \textbf{Exception} -- ošetření těchto výjimek má smysl. Jde například o výjimky jako pokus o otevření neexistujícího souboru, chybný formát čísla, dělení nulou apod. Do této skupiny by měly patřit také veškeré výjimky \textbf{definované uživatelem}. Jedná se o \textbf{checked} exceptions -- kompilátor kontroluje zda jsou ošetřeny při kompilaci.
+    \item \textbf{RuntimeException} -- potomek třídy \texttt{Exception}, značí obvyklé chyby, které \textbf{způsobil sám programátor} (neplatný index pole, volání nad nullovým ukazatelem). Jedná se o tzv. \textbf{unchecked} exceptions, tedy není při kompilaci kontrolováno zda jsou zachytávány \texttt{catch}, \texttt{throws}.
 \end{itemize}
 V javě lze zachytávat výjimky pomocí bloku \texttt{try-catch-finally} nebo klíčovým slovíčkem \texttt{throws} \textbf{v hlavičce metody}, který přenechá její ošetření nadřazenému bloku. Vlastní výjimky lze vracet slovíčkem \texttt{throw}.
 
-\subsection{C\#}
+\section{C\#}
 \begin{itemize}
-\item Všechny výjimky v C\# jsou jsou \textbf{unchecked (nehlídané)} -- kompilátor nekontroluje zda se ošetřují.
-\item Odvozena z třídy \textbf{Exception} nebo z některé z je-jich následníků.
-\item Obsahuje informace o: svém \textbf{původu}, \textbf{důvodu vzniku}.
+    \item Všechny výjimky v C\# jsou jsou \textbf{unchecked (nehlídané)} -- kompilátor nekontroluje zda se ošetřují.
+    \item Odvozena z třídy \textbf{Exception} nebo z některé z je-jich následníků.
+    \item Obsahuje informace o: svém \textbf{původu}, \textbf{důvodu vzniku}.
 \end{itemize}
 Výjimky fungují stejně jako v Javě, v případě neošetřené chyby dojde k \textbf{ukončení programu} s odpovídající \textbf{běhovou chybou}. Mechanismus výjimek je v jazyce C\# založen na klíčových slovech: \texttt{\textbf{try}}, \texttt{\textbf{catch}}, \texttt{\textbf{finally}}. Vlastní vyhození výjimky lze pomocí klíčového slova \textbf{\texttt{throw}}.
 
-\subsection{try-catch-finally}
+\section{try-catch-finally}
 Zpracování výjimky se vždy vztahuje k bloku programu vymezeného příkazem \texttt{try} následovaném \textbf{jedním nebo více} bloky \texttt{catch} popisujícími způsob ošetření jednotlivých výjimek a volitelným blokem \texttt{finally}, který se vykoná vždy na konci bloku (vhodné místo pro uvolnění zdrojů.).
 
 V C++ neexistuje blok \textbf{finally}. Díky technice RAII blok finally není potřeba, proto asi nikdy v C++ obsažen ani nebude.
@@ -46,7 +46,7 @@ class Vyjimky {
 }
 \end{minted}
 
-\subsection{Assert}
+\section{Assert}
 Assert (od verze 1.4) přináší snadný způsob jak vkládat do programu \textbf{jednoduché kontroly} (např.: zda je hodnota $> 0$), které se vyhodnotí a přeloží pouze pokud při překladu zadáme parametr \texttt{-ea}. To se hodí zejména při vývoji aplikace a ladění, kdy v produkčním buildu se program přeloží bez těchto kontrol (bez \texttt{-ea}) a výpočet se tak nikde nezdržuje.
 
 \begin{minted}[tabsize=4,obeytabs]{java}
@@ -63,34 +63,34 @@ class TestAssert {
 }
 \end{minted}
 
-\subsection{Datové proudy}
+\section{Datové proudy}
 Datové proudy jsou \textbf{sekvence dat}. Proud je definován svým \textbf{vstupem} a \textbf{výstupem}, těmi mohou být například soubor na disku, zařízení (vstupní klávesnice nebo myš, výstupní displej) nebo jiný program.
 
 Proudy také rozlišujeme na \textbf{binární} a \textbf{znakové}. Jak již názvy napovídají, tak zatímco binární proudy využijeme pro libovolná binární data (tj. data vkládáme je po bajtech), tak znakové proudy jsou určeny pouze pro text (znaky).
 
 Proudy jsou základní cestou jak pracovat s daty, \textbf{náhodným} i \textbf{sekvenčním} přístupem. Mezi nejjednodušší stream patří výpis na obrazovku \texttt{System.out.print();} \texttt{console.Writeln();}.
 
-\subsection{Streamy v .NET}
+\section{Streamy v .NET}
 \begin{itemize}
-	\item \textbf{Textové}: \texttt{StreamWritter}, \texttt{SreamReader} 
-	\item \textbf{Binární}:	 \texttt{BinaryWriter},	 \texttt{BinaryReader} 
-	\item \textbf{Další}:	 \texttt{MemoryStream},	 \texttt{GZipStream},		 \texttt{Bufferedstream} 
+    \item \textbf{Textové}: \texttt{StreamWritter}, \texttt{SreamReader}
+    \item \textbf{Binární}:	 \texttt{BinaryWriter},	 \texttt{BinaryReader}
+    \item \textbf{Další}:	 \texttt{MemoryStream},	 \texttt{GZipStream},		 \texttt{Bufferedstream}
 \end{itemize}
 
-\subsection{Streamy v Javě}
+\section{Streamy v Javě}
 V Javě všechny vstupní streamy dědí z abstraktní třídy \textbf{InputStream} a všechny výstupní z \textbf{OutputStream}.
 
-\subsubsection{Binární}
+\subsection{Binární}
 Binární proudy umožňují přenést \textbf{libovolná data}. Základní operací definovanou v InputStreamu je metoda \textbf{read}, pomocí které můžeme z proudu přečíst jeden byte. Analogicky výstupní proud definuje metodu \textbf{write}. \textbf{Čtení a zápis po jednotlivých bytech je velmi pomalý}, zvláště pokud uvážíme, že na druhé straně proudu může být disk – a každý dotaz může velmi snadno znamenat nutnost nového vystavení hlaviček.
 
 Třídy \textbf{BufferedInputStream} a \textbf{BufferedOutputStream} (\textbf{v Javě}) za nás tento nedostatek řeší. Tyto proudy obsahují \textbf{pole, které slouží jako vyrovnávací paměť}. V případě čtení z disku bufferovaný proud načte celý blok dat a uloží jej do pole, ze kterého data dále posílá našemu programu. V okamžiku, kdy se pole vyprázdní, učiní dotaz na další blok. Tímto způsobem dochází k eliminaci velkého množství zbytečných a drahých volání. (V .NET existuje třída \textbf{BufferedStream}.)
 
-\subsubsection{Textový}
+\subsection{Textový}
 Znakové proudy fungují stejným způsobem jako ty binární, pouze \textbf{operují s textem}. Poměrně důležitou poznámkou je, že \textbf{Java} interně uchovává řetězce ve znakové sadě \textbf{Unicode}, C\# využívá také Unicode, konkrétně UTF-16. Z toho plyne, že při každém zápisu a čtení ze znakového proudu dochází k překódování daného řetězce (znaků). \texttt{BufferedReader}/\texttt{BufferedWriter}.
 
-\subsubsection{Datové proudy}
+\subsection{Datové proudy}
 Java obsahuje třídy pro \textbf{pohodlné čtení a zápis primitivních datových typů} a typu \textbf{String}. Nejrozšířenější třídy jsou \texttt{DataInputStream} a \texttt{DataOutputStream}. String je ukládán v kódování UTF-8. Údaje takto uložené např. do souboru nejsou uživatelsky přívětivé a s výjimkou řetězců čitelné. Metody pro čtení jsou \texttt{readDouble}, \texttt{readInt}, \texttt{readUTF}. Obdobně metody pro zápis mají předponu \texttt{write}.
 
-\subsubsection{Objektové proudy}
+\subsection{Objektové proudy}
 Většina standardních tříd implementuje rozhraní \textbf{Serializable} (serializovatelný), které je nezbytné pro jejich podporu objektovými proudy. Objektové proudy rozšiřují datové proudy, takže objektové proudy \textbf{umí pracovat i s primitivními datovými typy}. Nové metody jsou \texttt{readObject} a \texttt{writeObject}. Pokud metoda \texttt{readObject} vrátí jiný než očekávaný objekt, vyhodí výjimku typu ClassNotFoundException. Pokud se objekt neskládá jen z primitivních typů ale i z referencí na další objekty, je potřeba zachovat tyto reference. Proto je při zápisu objektu uložit i všechny objekty, na které má daný objekt odkaz. Podobně se bude chovat čtecí proud, který se bude snažit zrekonstruovat celou takovou síť objektů
 
