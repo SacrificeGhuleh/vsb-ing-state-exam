@@ -1,197 +1,445 @@
-\section{JPEG}
-JPEG představuje jeden z nejpoužívanějších obrazových formátů (fotografie), jedná se o \textbf{ztrátový} formát obrázků. \textbf{Komprese JPEG} pracuje v několika krocích, principem je \textbf{redukce vysokofrekvenčních dat} v obrázků při zachování co nejvíce informací o nízkofrekvenčních datech. To je založeno na tom, že lidské oko se zaměřuje spíše na nízké frekvence (malou změnu jasu na ploše) a vysoké frekvence vnímá hůře (hrany). Můžeme si je tedy dovolit redukovat bez znatelné ztráty kvality obrazu. Zároveň se využívá \textbf{podvzorkování barev} $\rightarrow$ znovu z toho důvodu, že lidské oko vnímá více jas než barvy.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.3\textwidth]{assets/7_jpeg}
-\end{figure}
-
-\subsection{Komprese JPEG}
-\begin{enumerate}
-    \item \textbf{Převod RGB na YCbCr} -- vstupní obraz se převede na YCbCr, což jej rozdělí na \textbf{jasovou složku} (Y) a \textbf{chrominanční} složky (barvonosné Cb a Cr). To nám umožňuje následnou redukci barvonosné složky v jednom ze 3 módů: 4:4:4 (nepodvzorkovává se), 4:2:2 (horizontálně na polovinu, pro 2 jasové 1 barva), 4:2:0 (horizontálně i vertikálně na polovinu, pro 4 jasové 1 barva).
-    \item \textbf{Provedení DCT} -- obraz se následně rozdělí na bloky o velikosti $8 \times 8$. Pro každý blok se provede 2D DCT (diskrétní kosinova transformace), ta narozdíl od DFT produkuje pouze reálné komponenty. Výsledek DCT nám vrátí počet jednotlivých frekvencí, které se v obraze nachází, přičemž \textbf{nízké frekvence} se koncentrují vlevo nahoře a \textbf{vysoké frekvence} vpravo dole (viz obrázek).
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.8\textwidth]{assets/7_dct1}
-              \includegraphics[width=0.3\textwidth]{assets/7_dct2}
-              \includegraphics[width=0.35\textwidth]{assets/7_jpeg_zigzag}
-          \end{figure}
-    \item \textbf{Kvantizace} -- jednotlivé bloky jsou \textbf{vyděleny kvantizační maticí a zaokrouhleny}. Koeficienty matice definují \textbf{míru komprese} (čím větší hodnoty tím větší komprese a horší obraz). Většinou po aplikaci kvantizace v každém bloku zůstane pouze několik hodnot \textbf{vlevo nahoře} to vyplývá z toho co jsme zmínil výše $\rightarrow$ více se redukují vysoké frekvence, které si můžeme dovolit vynechat. Výsledek před a po kvantizaci je vidět obrázku níže.
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.8\textwidth]{assets/7_kvantizace}
-          \end{figure}
-    \item \textbf{Zig-zag intermediální sekvence} -- obraz po kvantizaci se projde \textbf{zig-zagem} a z daných čísel se vytvoří intermediální sekvence (\textbf{dvojice} ve tvaru \textbf{Symbol-1}, \textbf{Symbol-2}) pomocí \textbf{Run-Length encoding}. RLE kóduje pouze AC složky (1 - 64), DC složka (px na souřadnicích [0, 0] každého bloku) se kóduje \textbf{diferenciálně} vzhledem k DC složce v předchozím bloku. Intermediální sekvence vypadá následovně:
+\section{Příznakové rozpoznávání}
+\begin{itemize}
+    \item Založeno na tom, že každý objekt lze popsat množinou vhodných číselných hodnot = \textbf{příznaků}. Těch může být i více a potom tvoří \textbf{vektor příznaků}.
+    \item Vektor příznaků nese všechny podstatné informace o objektu a je\textbf{ jedinou informací} pro následné \textbf{rozpoznání}.
+    \item Počet příznaků a jejich typy bývá \textbf{obtížné} určit, je nutné provést experimenty. \textbf{Velikost} vektoru příznaků by měla být rozumná (ne příliš velká).
+    \item Obecně by zvolené příznaky měli \textbf{splňovat} následující:
           \begin{itemize}
-              \item \textbf{Symbol-2} -- (AMPLITUDE) značí hodnotu na daném pixelu po kvantizaci.
-              \item \textbf{Symbol-1} -- (RUNLENGTH, SIZE), kde RUNLENGTH značí počet nul, které danému prvku předchází v zig-zag sekvenci (pokud je počet větší než 15, zapíše se 15) a SIZE je počet bitů nutných k reprezentaci AMPLITUDE. \textbf{Speciální hodnota} (0, 0) říká, že předchozí nenulová hodnota byla poslední.
-              \item \textbf{Kódování} -- \textbf{DC} složky se kódují odlišně (SIZE, AMPLITUDE), \textbf{AC} složky ((AMPLITUDE), (RUNLENGTH, SIZE).
+              \item hodnoty příznaků jsou podobné pro objekty stejných tříd a odlišné pro objekty jiných tříd,
+              \item měly by být pokud možno nezávislé na hodnotách jiných příznaků.
           \end{itemize}
-          Intermediální sekvence se poté zakóduje \textbf{Huffmanovým kódem}, kde se kódují pouze kombinace (RUNLENGTH, SIZE) u AC a (SIZE) u DC podle předem daných tabulek. AMPLITUDE se zapisuje pomocí \textbf{jednotkového doplňku} (způsob reprezentace záporných čísel).
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=\textwidth]{assets/7_intermediate}
-          \end{figure}
+\end{itemize}
+
+\subsection{Momenty}
+Momenty \textbf{různého stupně} patří k často používaným příznakům. Důvodem je, že jejich schopnost od sebe rozlišit objekty různých tříd často vyhovuje a jejich \textbf{výpočet je snadný}. Moment vztažený k souřadné soustavě obrazu:
+\begin{equation*}
+    m_{p, q} = \int{}\int_\Omega x^p y ^q f(x, y)dx dy,
+\end{equation*}
+kde $f(x, y)$ je obrazová funkce, $p, q$ udávají \textbf{stupeň} momentu a $\Omega$ je ta část obrazu, kterou považujeme za rozpoznávaný objekt. U diskrétních obrazů se nahrazuje \textbf{sumou}. Hodnoty $p, q$ lze zvolit $p \geq 0, q \geq 0$, přičemž: $m_{0,0}$ -- \textbf{plocha objektu} vážená hodnotou jasu. Máme 3 základní typy momentů:
+\begin{itemize}
+    \item \textbf{invariantní vůči posunu} (nezávislá na poloze objektu) - $m_{p, q} \rightarrow \mu_{p, q}$,
+    \item \textbf{invariantní vůči měřítku} (nezávislá na velikosti objektu, normalizace) - $m_{p, q} \rightarrow \upsilon_{p, q}$,
+    \item \textbf{invariantní vůči rotaci} dána momentovými invarianty - sestavení $\theta_n$,
+\end{itemize}
+
+\subsection*{Výpočet polohy těžiště (nezávislost na poloze)}
+K výpočtu polohy těžiště objektů lze použít momentů $m_{0,0}, m_{1,0}, m_{0,1}$, což dává:
+\begin{equation*}
+    x_t = \frac{m_{1,0}}{m_{0,0}}, \quad y_t = \frac{m_{0,1}}{m_{0,0}}.
+\end{equation*}
+Také \textbf{poloha objektu} reprezentována jeho těžištěm může být sama o sobě použita jako \textbf{příznak} ($x_t, y_t$). Momenty vztažené vzhledem k těžišti, které je činí \textbf{nezávislé na poloze objektu} avšak stále závislé na \textbf{velikosti} a \textbf{rotaci} objektu, lze vypočítat:
+\begin{equation*}
+    \mu_{p, q} = \int{}\int_\Omega (x - x_t)^p (y - y_t)^q f(x, y)dx dy.
+\end{equation*}
+
+\subsection*{Momenty nezávislé na velikosti}
+Pokud není pro rozpoznání důležitá velikost objektu, je možné použít \textbf{normalizovaných momentů $\upsilon_{p, q}$} (normalizace pomocí součtu jasových hodnot objektu):
+\begin{equation*}
+    \upsilon_{p, q} = \frac{\mu_{p, q}}{(m_{0, 0})^\gamma}, \quad \textrm{kde } \gamma = \frac{p + q}{2} + 1.
+\end{equation*}
+
+\subsection*{Momenty nezávislé na natočení}
+Pokud nemá rozpoznání záležet ani na orientaci (natočení), je nutné momenty počítat k hlavním osám objektu. Hlavní osy vytvářejí souřadnou soustavu, která má počátek v těžišti rozpoznávaného objektu a vzhledem k souřadné soustavě obrazu je pootočena o úhel $\Theta$. Pootočení $\theta$ je dáno podmínkou, aby momenty $\mu'_{2, 0}$ a $ \mu'_{0, 2}$ vypočítány k hlavním osám byly extrémy. Opět lze použít i samotný úhel pootočení jako \textbf{příznak}.
+
+\subsection{Pravoúhlost a podlouhlost}
+Hranici objektu \textbf{postupně rotujeme} v rozsahu $0 - 90^\circ$. Krok úhlu rotace zvolíme v jednotkách stupňů (např. $5^\circ$). Po provedení rotace opíšeme kolem objektu pravoúhelník, jehož strany jsou rovnoběžné se stranami obrazu (po provedení rotace stačí nalézt extrémy hranice). Ze všech pravoúhelníků vybereme ten, který má \textbf{nejmenší plochu} $A_O$, a délky jeho stran značíme postupně $A_R$, $a$, $b$. Pravoúhlost ($R$) a podlouhlost ($S$) je definována následovně:
+\begin{equation*}
+    R = \frac{A_O}{A_R}, \quad S = \frac{a}{b}.
+\end{equation*}
+
+\subsection{Kruhovost}
+Nechť $ P $, $ A  $označují délku hranice objektu a jeho plochu, kruhovost je pak definována vztahem:
+\begin{equation*}
+    C = \frac{P^2}{A}.
+\end{equation*}
+Pro kruh je $C = 4 \pi$, pro čtverec $C = 16$, pro objekty nepravidelného tvaru jsou hodnoty vyšší. Tyto hodnoty jsou však teoretické a skutečná hodnota se může lišit (viz obr).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/9_kruhovost}
+\end{figure}
+
+\subsection{Průměrná vzdálenost pixelu od hranice}
+Nechť $d_i$ je vzdálenost í-tého pixelu od hranice objektu, jehož plocha je $A$ (vzdáleností rozumíme, kvůli rychlosti, pouze počet řad pixelů, které leží mezi pixelem a hranicí). Průměrnou vzdálenost $\mu_d$ a koncentrovanou informaci o tvaru objektu $S$ získáme jako:
+\begin{equation*}
+    \mu_d = \frac{1}{N} \Sigma^N_{i = 0}d_i, \quad S = \frac{A}{\mu_d^2}.
+\end{equation*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/9_px_vzdalenost}
+    \includegraphics[width=0.68\textwidth]{assets/9_stanoveni_hranice}
+\end{figure}
+
+\subsection{Průběh křivosti hranice objektu}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/9_krivost}
+\end{figure}
+
+\subsection{Eulerovo číslo}
+Nechť $C$ je počet navzájem nesouvislých částí rozpoznávaného objektu a $H$ je počet děr v objektu pak Eulerovo číslo je rozdíl $C - H$, jelikož však většinou detekujeme jeden souvislý objekt, rovnice bude rovna $1 - H$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{assets/9_euler}
+\end{figure}
+
+\subsection{Atributy odvozené z histogramu jasu}
+Možné použití, pokud rozpoznáváme objekty, pro něž je charakteristické jisté rozložení jasu po ploše objektu, nebo pro objekty pokryté texturou. Pokud je $N$ počet pixelů plochy objektu, potom normalizovaný histogram (vydělíme počtem pixelů plochy), v podstatě představuje \textbf{pravděpodobnost} toho, že se na daném místě nachází pixel s danou hodnotou. S využitím pozorování, že funkci $p(b)$ (pravděpodobnost, že tam bude pixel) lze interpretovat jako hustotu pravděpodobnosti, lze jako \textbf{příznaky} využít \textbf{střední hodnotu}, \textbf{varianci}, \textbf{šikmost}, \textbf{energie}, \textbf{entropie}.
+
+\subsection{Atributy odvozené z frekvenčního spektra jasu}
+Hodí se např. když má objekt nějakou \textbf{texturu}. Provede se furierova transformace nad oblastí, kterou objekt zaujímá (pokud je objekt třeba kulatý, vyplníme jej menšími obdelníky a na každý uděláme furiera). Jednotlivá data frekvenčního spektra mohou sloužit jako příznaky, je však žádoucí je nějakým způsobem redukovat -- zapisujeme počet frekvencí, která se nachází v nějakém definovaném \textbf{rozsahu}.
+
+\section{Příznakové metody analýzy obrazu (klasifikátory)}
+\textbf{Klasifikátor} nazveme zobrazení $d: X \rightarrow \Omega$, která každému vektoru příznaků ($ X $) přiřadí identifikátor třídy, do které dané objekt náleží. Rozlišujeme několik základních druhů klasifikace:
+\begin{enumerate}
+    \item \textbf{Klasifikace pomocí diskriminačních funkcí} -- předpokládáme že existuje $n$ reálných diskriminačních funkcí $g_1(x), g_2(x), ...$ definovaných nad $X$. Rozpoznání je v tomto případě založeno na stanovení funkce dávající pro zadaný vektor příznaků \textbf{maximální hodnotu}. \textbf{Problém}: nalezení těchto funkcí $\rightarrow$, lze pomocí rozdělení hustoty pravděpodobnosti.
+
+          Nejjednodušším tvarem diskriminační funkce je funkce lineární, která definuje váhy ($a$) pro každý příznak:
+          \begin{equation*}
+              g_r(x) = a_{r,0} + a_{r,1} x_1 + a_{r,2} x_2 + \ldots + a_{r,m}x_m
+          \end{equation*}
+    \item \textbf{Klasifikace pomocí minimální vzdálenosti (etanoly)} -- etanol $e_r$ je vektor, který reprezentuje nějakou třídu příznaků. Tento vektor lze nejjednodušeji získat jako \textbf{průměr} všech ostatních příznaků dané třídy trénovací množiny. Klasifikaci objektu do dané třídy pak lze získat vypočítáním a nalezením \textbf{nejmenší Euklidovské vzdálenosti} mezi vektorem příznaků objektu a jednotlivými etanoly.
 \end{enumerate}
 
-\section{MPEG}
-MPEG je zkratkou pro Moving Picture Expert Group. Cílem práce této skupiny bylo standardizovat metody komprese videosignálu. Existuje několik standardů MPEG-(1, 2, 4, 7).
+\subsection{KNN - K-nearest neighbours}
+\begin{itemize}
+    \item velmi rychlý, jednoduchý (lze použít i jiné shlukovací algoritmy pro vytváření jednotlivých \textbf{etanolů}),
+    \item pomocí \textbf{k nejbližších sousedů} určíme label dotazovaného ,
+    \item učení je velmi rychlé (jen se uloží data do struktur),
+    \item určení se zpomaluje se zvyšujícím se k.
+\end{itemize}
 
+\subsection{Neuronové sítě \textit{ANN} - Artificial Neural Network}
+\begin{itemize}
+    \item Inspirované \textbf{lidským mozkem}, který je složený z~různých vzájemně propojených vrstev neuronů, kde každý z~nich přijímá informaci z~předchozího, zpracovává tuto informaci a~odesílá jí do dalšího neuronu, dokud není přijat konečný výstup.
+    \item Může se jednat o~výstup \textbf{s~danou třídou}, jestliže se jedná o~kontrolované učení nebo \textbf{o~určitá kritéria} v~případě nekontrolovaného učení.
+    \item Umožňuje klasifikovat více tříd.
+\end{itemize}
+Příklad topologie neuronové sítě je na obrázku \ref{fig:ann}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{assets/7_mpeg}
+    \includegraphics[width=.6\linewidth]{assets/9_ann.pdf}
+    \caption{Neuronová síť je propojená skupinou uzlů, podobná síti neuronů v~mozku.}
+    \label{fig:ann}
 \end{figure}
 
+Typickým příkladem neuronové sítě je \textbf{vícevrstvý perceptron} (ANN--MLP). Tato neuronová síť se skládá minimálně ze tří vrstev uzlů (vstupní, výstupní a~skrytou). Každý z~uzlů je \textbf{neuron}, který využívá nelineární aktivační funkci s~výjimkou vstupních uzlů:
 \begin{itemize}
-    \item \textbf{MPEG-1} -- první standard, dokončen v roce 1991. Navržen zejména pro práci s obrazy $352\times288$ pixelů, 25FPS (odvozeno od televizní normy PAL) nebo $352\times240$, 30FPS (odvozeno od NTSC) při datovém toku \textbf{1.5 MBit/s} (optimální tok, mohl být i vyšší).
-    \item \textbf{MPEG-2} -- dokončen v roce 1994, mnohem velkorysejší implementace, snaží se být co \textbf{nejuniverzálnější}. Zavádí několik \textbf{profilů} (podmnožina z nejširší možné syntaxe) a \textbf{úrovní} (definuje parametry v rámci daného profilu).
-    \item \textbf{MPEG-3} -- práce na tomto standardu byly zastaveny (měl sloužit pro HDTV) později byl sloučen do MPEG-2.
-    \item \textbf{MPEG-4} -- metodou komprese se značně liší oproti MPEG-1,2, je určen pro \textbf{extrémně nízké datové toky}.
-    \item \textbf{MPEG-7} -- neříká nic o kódování, jedná se o standard pro popis dat (\textbf{metadata}) s multimediálním obsahem.
+    \item{\textbf{Vstupní vrstva} - jedná se o~pasivní vrstvu, která nemodifikuje data, pouze je získává z~okolního světa a~pošle je dál do sítě. Počet uzlů v~této vrstvě závisí na \textbf{množství příznaků} nebo deskriptivních informací, které chceme extrahovat z~obrázku.}
+    \item{\textbf{Skrytá vrstva} - v~této vrstvě probíhá transformace vstupů do něčeho, co může výstupní nebo jiná skrytá vrstva využít (za předpokladu, že existuje více skrytých vrstev). Počet uzlů je určen složitostí problému a~přesnosti, které chceme přidat do sítě.}
+    \item{\textbf{Výstupní vrstva} - tato vrstva musí také vždy existovat v~topologii sítě, ovšem počet uzlů v~tomto případě bude definován vybranou neuronovou sítí. Pokud detekujeme na obrázku pouze jeden objekt, bude mít vrstva jen jeden uzel (lineární regrese) a~bude vracet hodnotu definující pravděpodobnost konkrétního objektu v~rozmezí $[-1,1]$.}
 \end{itemize}
 
-\subsection{Komprese MPEG}
-Standard MPEG, rozlišuje \textbf{tři typy rámců (I, B, P)},  ve své podstatě pro kódování využívá stejných principů jako JPEG (\textbf{rámec I} se kóduje nezávisle). Oproti JPEG však využívá i \textbf{časové koherence}. Tedy k dosažení maximální komprese se předpokládá, že po sobě jdoucí rámce jsou s největší pravděpodobností dosti podobné. Počítá se ovšem s tím, že části obrazů se mohou přemístit, k tomu se využívá vložených rámců P a B, které se kódují \textbf{závisle} vzhledem k ostatním.
-\begin{itemize}
-    \item \textbf{I} -- jsou kódovány každý \textbf{zvlášť}, bez vazby na rámce předcházející či následující. Pricip kódování (komprese) je stejný jako u standardu \textbf{JPEG} (i když v detailech existují některé \textbf{odlišnosti}: jiná kvantovací tabulka, jiná struktura intermediální sekvence a jiný způsob \textbf{zig-zagu} (podle MPEG-2)). \textbf{Kvantizační tabulka} může být pro každý makroblok jiná -- změnou měřítka lze \textbf{řídit tok dat} (některé aplikace mohou vyžadovat konstantní tok dat).
-    \item \textbf{P (Predicted)} -- tento rámec je kódován \textbf{vzhledem k jedinému předcházejícímu rámci typu I nebo P}.
-    \item \textbf{B (Interpolated bi-directionally)} -- tyto rámce jsou kódovány vzhledem k nejbližšímu \textbf{předchozímu} a \textbf{nejbližšímu} budoucímu rámci typu \textbf{I} nebo \textbf{P}. Jejich použití je nepovinné ale z hlediska dosahovaných kompresních poměrů výhodné. \textbf{Komplikace} z použití rámců B spočívá v uchovávání v paměti dva kotevní obrazy. Dále je nevyhnutelné jisté časové zpoždění, protože nejprve musí být k dispozici obraz \textbf{novější} a teprve potom může být kódován obraz starší.
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.48\textwidth]{assets/7_mpeg_komprese}
-              \includegraphics[width=0.35\textwidth]{assets/7_mpeg_zigzag}
-          \end{figure}
-\end{itemize}
-
-Velmi často používané řazení rámců je IBBPBBPBBI. Kódování rámců P a B taky probíhá po \textbf{makroblocích}. Pro každý makroblok v cílovém (tj. právě kódovaném rámci) jsou sestaveny \textbf{vektory pohybu} (pro každý makroblok v P \textbf{jeden} vektor, v B jsou vektory \textbf{dva}) vzhledem k referenčním rámcům.
-
-\textbf{Vektor pohybu} je definován takto: jestliže o uvedený vektor posuneme kódovaný makroblok a porovnáme s odpovídající částí referenčního obrazu, pak je dosaženo dobré shody. Vektory posunutí se stávají \textbf{součástí komprimované} sekvence. Po nalezení vektoru jsou \textbf{kódovány diference} -- podobně jako u JPEGu mezi odpovídajícími makrobloky bude v dvou rámcích \textbf{malý rozdíl} a výsledné data po kvantizaci vyžadují tak \textbf{malé sekvence} (komprese).
-\begin{itemize}
-    \item Bloky \textbf{P} se kódují $T-R$, kde T je makroblok v cílovém rámci,
-    \item bloky \textbf{B} se kódují $T - 0.5 (R_1 + R_2)$, kde $R_1$ a $R_2$ jsou makrobloky v cílových rámcích.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.48\textwidth]{assets/7_mpeg_kodovani_B}
-\end{figure}
-
-\subsection{Stanovení pohybového vektoru}
-Stanovení pohybového vektoru MPEG norma nepředepisuje, jedná se však o jeden z \textbf{nejobtížnějších problémů}. Většinou se využívá pouze \textbf{jasové} (Y) složky, existuje několik metod:
-
+\textbf{Učení:}
 \begin{enumerate}
-    \item \textbf{Porovnání makrobloků} -- v referenčním rámci se nalezne makroblok, který nejvíce odpovídá zpracovávanému makrobloku. Pro určení shody lze použít např. SSD. \textbf{Účinné}, avšak velmi \textbf{časově náročné}.
-    \item \textbf{Logaritmické vyhledávání} -- vylepšení předchozí metody, má logaritmickou časovou složitost. V prvním kroku algoritmus testuje 9 dvojic. V každém dalším kroku se testuje vždy po 8 dvojicích rozmístěných kolem předchozího bodu, který měl největší shodu. Rychlejší, ale nemusí být tak přesné jak předchozí metoda.
-    \item \textbf{Rekurzivní dělení} -- rekurzivně dělíme obraz na menší a menší. Poté nalezneme prvotní odhad v nejmenším obraze a se zvyšující se velikostí (návrat z rekurze) pozici vektoru jen upřesňujeme. Rychlé a spolehlivé.
+    \item Jednotlivé neurony jsou navzájem propojeny synapsemi (\textbf{váhami}), které na začátku náhodně nastřelíme (v intervalu $\angle -0.5, 0.5 \rangle$).
+    \item Poté neuronové síti podáváme trénovací data (vstupní příznaky a odpovídající výstup), která postupně \textbf{upravuje váhy} jednotlivých synapsí, aby dávala správný výsledek a minimalizovala chybu.
+    \item Jednou z metod minimalizace chyby je učení ,,\textbf{back propagation}", což představuje hledání minima \textbf{gradientní metodou}.
 \end{enumerate}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.48\textwidth]{assets/7_mpeg_rekurze}
-    \includegraphics[width=0.48\textwidth]{assets/7_mpeg_log}
-\end{figure}
-
-Kódování složek vektorů se provádí \textbf{inkrementálně vzhledem k předchozí hodnotě}. Zároveň může nastat situace kdy se vektor nepodaří nalézt, v tom případě je možné kódovat dané makrobloky nezávisle na ostatních (stejně jako I).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{assets/7_mpeg_schema}
-\end{figure}
-
-\section{Principy úprav obrazu v prostorové a frekvenční doméně}
-Úpravy nad obrazy lze provádět v \textbf{prostorové} (obraz je reprezentován souřadnicemi x, y a hodnotou pixelu) nebo \textbf{frekvenční} (snímek je popsán harmonickými funkcemi (sin a cos) různé amplitudy, frekvence a fáze) doméně. Většina operací nad prostorem signálů je popsána \textbf{operátorem}, pro převod do frekvenční domény se poté používá \textbf{(Diskrétní) Fourierova transformace}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{assets/7_signaly}
-\end{figure}
-
-\section{Operace nad prostorem signálů}
+\textbf{Další vlastnosti:}
 \begin{itemize}
-    \item \textbf{Lineární operace} -- úprava signálu je popsána operátorem $\mathcal{O}$, velmi často předpokládáme, že operátor $\mathcal{O}$ má nějaké speciální vlastnosti. Platí: $\mathcal{O}\{af(x, y) + bg(x, y)\} = a\mathcal{O}\{f(x, y)\} + b\mathcal{O}\{g(x, y)\}$.
-    \item \textbf{Operace invariantní vůči posuvu} -- považujeme aby měl operátor kromě linearity ještě další vlastnosti (invarianci vůči posuvu). Operátor $\mathcal{O}$ je invariantní vůči posuvu, pokud pro všechna $f(x, y)$ platí: $g(x - a, y -b) = \mathcal{O}\{f(x-a, y-b)\}$. Méně formálně: pokud provedeme operátor na dva vzájemně posunuté ale jinak shodné signály, jejich výsledek bude také vzájemně posunutý ale jinak \textbf{stejný}.
-    \item \textbf{Dirakův impulz} -- je impulzová funkce $\delta(x, y) = 0$, v bodě (0, 0) je hodnota \textbf{nekonečno}, všude jinde nulovou, přičemž platí $\delta(-x, -y) = \delta(x, y)$, a \textbf{integrál} přes celou funkci je roven 1. JInak řečeno se jedná o funkci, která je nekonečně vysoká a nekonečně úzká v bodě (0, 0).
+    \item Vysoká dimenze vstupního vektoru zvyšuje přesnost výsledků (ovšem zvyšuje výpočetní náklady)
+    \item Aktivační funkce pro skrytou vrstvu, která umožnuje přizpůsobit nelineární hypotézy a~získat lepší detekci vzoru v~závislosti na poskytnutých datech (Sigmoid, tanh, ReLU).
+    \item Hodnoty jsou získávány z~předchozí vrstvy, sečteny s~určitými váhami a~hodnotou zkreslení. (Suma těchto hodnot je transformována pomocí aktivační funkce, může se lišit pro různé neurony)
 \end{itemize}
 
-\section{Konvoluce (lineární sumace bodových zdrojů)}
-Konvoluce představuje základní matematický \textbf{operátor}, který pracuje s dvěma funkcemi (značí se $*$). Umožňuje zpracování obrazových signálů jak v prostorové tak frekvenční doméně (konvoluční teorém). Spojitá konvoluce je definována takto:
-\begin{equation*}
-    f(x, y) * h(x, y) = \int_{-\infty}{\infty}^{-\infty}{\infty} h(a, b) f(x - , y - b)dadb,
-\end{equation*}
-kde funkci $h$ nazýváme \textbf{konvoluční jádro} (filtr), přesně řečeno se jedná o impulzovou charakteristiku filtru. Při výpočtu se funkce $h$ v rovině $x, y$ otočí o $180^\circ$ (důsledek členů se zápornými znaménky). Konvoluční operátor má tyto \textbf{vlastnosti}:
-\begin{itemize}
-    \item \textbf{Komutativní} -- $f * g = g * f$.
-    \item \textbf{Asociativní} -- $f * (g * h) = (f * g) * h$.
-    \item \textbf{Distributivní} -- $f * (g + h) = (f * g) + (f * h)$.
-    \item \textbf{Existence jednotky} -- $f * \delta = \delta * f = f$, kde $\delta$ je dirakův impulz a $\delta(x) = 0, x \neq 0$.
-    \item \textbf{Asociativita při násobení skalárem} -- $a(f * g) = (af) * g = f * (ag)$
-    \item \textbf{Konvoluční teorém} -- $\mathcal{F}(f * g) = [\mathcal{F}(f)] \cdot [\mathcal{F}(g)] = F \cdot G$, kde $\mathcal{F}[f(x)]$ značí Fourierovu transformaci. Jinými slovy: Fourierovým obrazem konvoluce funkcí $f, g$ je součin jejich Fourierových obrazů $F$ a $G$.
-\end{itemize}
-
-\subsection{Diskrétní konvoluce}
-V počítačové grafice využíváme často pro zpracování dvourozměrného diskrétního signálu, je popsaná tímto vzorcem:
-\begin{equation*}
-    (f*h)(x,y)=\sum _{{i=-k}}^{k}\sum _{{j=-k}}^{k}f(x-i,y-j)\cdot h(i,j)
-\end{equation*}
-
-V případě diskrétní konvoluce lze jádro chápat jako \textbf{tabulku} (konvoluční masku), kterou přiložíme na příslušné místo obrazu. Každý pixel překrytý tabulkou vynásobíme koeficientem v příslušné buňce a hodnoty sečteme, ty uložíme na pozici středového pixelu. V případě, že koeficienty již nejsou normalizované, je nutné je \textbf{normalizovat} (zprůměrovat), např.: maska $3 \times 3$ pokud je všude 1 (uniformní filtr) tak výsledek je nutné vydělit $9$.
-
-Hodnoty konvoluční masky mají vliv na výsledek operace, používají se masky pro: \textbf{rozostření}, \textbf{zostření}, \textbf{detekci hran}, atd.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{assets/7_konvoluce}
-\end{figure}
-
-\section{Fourierova transformace}
-Slouží pro převod obrazových signálů z prostorové do \textbf{frekvenční domény} (na komponenty složené ze sínů a cosínů). Pro analýzu \textbf{diskrétního} obrazu se využívá DFT, která je dána vztahem:
-\begin{equation*}
-    F(k, l) = \sum_{m = 0}^{M - 1}\sum_{n = 0}^{N - 1} f(m, n) \frac{1}{\sqrt{MN}} \exp \left[ -j2\pi \left( \frac{mk}{M} + \frac{nl}{N} \right) \right],
-\end{equation*}
-
-kde $k = 0, \ldots M - 1$, $l = 0, \ldots N - 1$. Symbol $F(k, l)$ značí frekvenční spektrum obrazu s souřadnicemi $(k, l)$, které nabývá hodnot od 0 - $(M, N)$. Frekvenční spektrum obsahuje \textbf{komplexní čísla}, proto se pro zpracování obrazového signálu ve frekvenční oblasti používají \textbf{amplitudy} komplexních čísel (amplitudová frekvenční charakteristika) nebo výkonová spektrální hustota (koeficienty násobené komplexně sdruženým číslem). Příklad amplitudové charakteristiky je na následujícím obrázku.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{assets/7_amp_ftt}
-\end{figure}
-
-Tato frekvenční charakteristika obsahuje \textbf{koeficienty odpovídající různým frekvenčním složkám}. Analýzou a operacemi s koeficienty ve frekvenční oblasti lze \textbf{modifikovat obraz v prostorové oblasti} např. realizovat filtr typu \textbf{dolní propust pro vyhlazení obrazu}. Pro získání modifikovaného obrazu je třeba převést koeficienty zpět do prostorové oblasti. Tomuto procesu se říká zpětná nebo někdy \textbf{inverzní Fouriérova transformace} IFT, jejíž diskrétní varianta IDFT je dána následujícím definičním vztahem:
-\begin{equation*}
-    f(m, n) = \sum_{m = 0}^{M - 1}\sum_{n = 0}^{N - 1} F(k, l) \frac{1}{\sqrt{MN}} \exp \left[ j2\pi \left( \frac{mk}{M} + \frac{nl}{N} \right) \right].
-\end{equation*}
-
-\section{Filtrace ve frekvenční oblasti}
-\textbf{Postup filtrace} obrazů ve frekvenční doméně je následující:
+\section{Histogram orientovaných gradientů HOG}
+Základní myšlenkou je, že objekt v obraze může být pomocí vzhledu a tvaru charakterizován pomocí intenzity gradientů, i přestože neznáme jejich přesnou polohu v obraze. Autoři jsou N. Dalal a B. Triggs (2005).
 \begin{enumerate}
-    \item aplikace diskrétní Fourierovy transformace (DFT) $f(x, y) \rightarrow F(u, v)$,
-    \item aplikace filtru $G(u, v) = H(u, v) F(u, v)$, kde:
+    \item před započetím výpočtů je třeba normalizovat, například normalizaci barev a~gamy, v~případě černobílých obrázků k~normalizaci kontrastu (tento krok může být přeskočen,dle Dalal a~Triggs $\,\to\,$ předzpracování má malý vliv na výkon)
+    \item obraz se \textbf{rozdělí} na malé prostorové oblasti (buňky, například $8 \times 8$ pixelů)
+    \item pro každou buňku se vypočítá 1-D \textbf{histogram}, který je vypočítán ze všech pixelů z buňky (hodnoty buněk jsou rovnoměrně rozloženy do histogramu o~9 kanálech (binech) po \ang{20}; rozsah \ang{0}--\ang{180})  $\,\to\,$ výjde nám vektor o velikosti 9
+    \item buňky spojíme do větších \textbf{propojených bloků} $16 \times 16$ z~důvodu normalizace osvětlení a~kontrastu. Pro chodce se používá L2--norm normalizace, dle vztahu \eqref{eq:normHog} $\,\to\,$ vznikne vektor velikosti $9\times4$ = 36 (čtyři $8 \times 8$ bloky)
+    \item vektor normalizovaných histogramů pro jeden blok nazýváme \textbf{deskriptor}.
+    \item spojíme tyto normalizované vektory do jednoho a získáme \uv{trénovací} vektor příznaků (features)
+\end{enumerate}
+Existují dvě varianty spojení bloků, tzv. obdélníkové bloky (R--HOG) a~kruhové bloky (C--HOG).
+Rozdělení do rozsahu 0--\ang{180} proto, že se jedná o bezznaménkové gradienty (unsigned) a bylo dokázáno, že fungují lépe než znaménkové (signed) 0--\ang{360}. Některé implementace HOG umožní určit, zda chceme používat signed gradienty.
+\begin{equation}
+    \centering
+    \label{eq:normHog}
+    \begin{aligned}
+        L2-norm & : \qquad  f = & \frac{v}{\sqrt{\lVert v~\lVert_2^2 + e^2}} \\
+        L1-sqrt & : \qquad  f = & \sqrt{\frac{v}{\lVert v~\lVert_1 + e}}
+    \end{aligned}
+\end{equation}
+Nechť $v$ je nenormalizovaný vektor obsahující všechny histogramy v~daném bloku, $\lVert v~\lVert_k$ je jeho k--norm pro $k = 1,2$, a~$e$ je malá konstanta.
+
+\textbf{C--HOG} (Kruhové HOG bloky) - lze nalézt ve dvou variantách: \textit{s~jedinou, centrální buňkou} a~\textit{úhlově rozdělenou centrální buňkou}. Dají se popsat čtyřmi parametry: počtem úhlů a~radiálních kanálů (binů), poloměrem centrálního binu a~faktorem roztažení pro poloměr dalších radiálních binů.
+
+\textbf{R--HOG} (Obdélníkové HOG bloky) - tyto bloky jsou v~praxi nejčastěji používané a~reprezentují se třemi parametry: \textit{počet buněk na blok}, \textit{počet pixelů na buňku} a~\textit{počet binů (kanálů) na jeden histogram}. R--HOG bloky se také používají pro kódování informací.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{assets/9_hog_variants.pdf}
+    \caption{Varianty geometrie spojení bloků}
+    \label{variants_block}
+\end{figure}
+
+\section{SIFT/SURF - detektory a popisovače klíčových bodů}
+Využívá se stejný princip tvoření histogramu jako u metody HOG
+\begin{itemize}
+    \item klíčové body jsou \textbf{nezávislé} na osvětlení, velikosti, orientaci, pozici
+    \item Octave - úroveň skálování
           \begin{itemize}
-              \item $G(u, v)$ \ldots výslední snímek
-              \item $H(u, v)$ \ldots funkce filtrace (konvoluční maska?)
-              \item $F(u, v)$ \ldots původní snímek
+              \item 4 oktávy a 5 rozmazání “ideál” dle prezentace, každá oktáva se 5x rozmaže
+              \item vypočítá se rozdíl mezi rozmazanými obrázky
+              \item klíčový bod najdeme jako minimum/maximum mezi ruznými urovněmi rozmazání
           \end{itemize}
-          inverzní Fourierova transformace (IDFT) $G(u, v) \rightarrow g(x, y)$.
-\end{enumerate}
-
-\subsection{Nízkofrekvenční, pásmový, vysokofrekvenční filtr}
-Bázové funkce jsou síny a cosíny s rostoucí frekvencí. Tedy $ F(0, 0) $ (\textbf{střed obrázku}) reprezentuje DC složku, tedy \textbf{průměrný jas} napříč obrazem a $F(M -1, N - 1)$ reprezentuje \textbf{nejvyšší frekvenci}, to lze pozorovat na amplitudové charakteristice výše.
-
-Tedy \textbf{čím dále od středu, tím je frekvence vyšší}. Zároveň můžeme vidět, že \textbf{amplituda je menší pro vyšší frekvence}, nízké frekvence tedy obsahují více informací o obraze než ty vyšší a obecně se jich ve většině obrazů nachází více (čím rychlejší změna jasu/gradient tím vyšší frekvence). Všech těchto znalostí můžeme využít k návrhu požadovaného filtru:
-\begin{itemize}
-    \item \textbf{Nízkofrekvenční} (lowpass) filtr může například propouštět pouze frekvence kolem středu (tedy ty nízké) a ostatní vynulujem, tento filtr lze navrhnout pomocí binární masky (bílý kruh ve středu) $\rightarrow$ \textbf{minimalizujeme ostré hrany}.
-    \item \textbf{Vysokofrekvenční} (highpass) filtr, postup je analogický k předchozímu, pouze tentokrát vynulujeme frekvence na středu a ty na krajích (vysoké) propustíme $\rightarrow$ \textbf{zvýrazníme hrany}.
-    \item \textbf{Pásmový} filtr propouští pouze předem definované pásmo.
+    \item poté musíme provést eliminaci slabých bodů
+          \begin{itemize}
+              \item odebereme ty s malou intenzitou
+              \item odstraníme klíčové body, které leží na hraně - využit princip Harrisova detektoru hran - Hessian matice (matice druhých derivací)
+          \end{itemize}
+    \item orientace bodu se vypočítá pomocí histogramu směrů gradientů v okolních bodech, zajišťuje nám to invarianci vůči rotaci (36 košů)
+    \item Descriptor
+          \begin{itemize}
+              \item 16x16 matice okolo klíčových bodů
+              \item rozdělit na 4x4 subbloky (16 bloků v 16x16 okolí)
+                    \begin{itemize}
+                        \item v nich vypočítat histogram orientací gradientu
+                        \item poté tento histogram převést do vektoru (viz HOG)
+                        \item spojit pro všechny bloky a máme výsledný vektor
+                    \end{itemize}
+          \end{itemize}
+    \item SURF má stejné kroky jako SIFT, jen má jiné \uv{implementace} kroků
 \end{itemize}
 
-\subsection{Butterworthův filtr}
-Často se pro filtraci ve frekvenční oblasti využívá Butterworthův filtr, který má ze všech běžných filtrů (Gaussian, Chebyshev, Bessel) \textbf{nejméně zvlněné frekvenční spektrum} a konverguje k nule u maximální frekvence. Je dán vztahem:
+\section{Haarovy příznaky}
+\begin{itemize}
+    \item Na tomto přístupu je založen objektový detektor \textbf{Viola--Jones} (\textit{Viola--Jones object detector framework}).
+    \item Poskytuje v~reálném čase \textbf{spolehlivou} a~\textbf{konkurenceschopnou} detekci objektů.
+    \item Může být vytrénován pro detekci různých objektových tříd (primárně určen pro \textbf{detekci obličejů}).
+    \item Detektor pracuje s~obrazy ve stupních šedi a~skládá se ze tří částí. (Integrální obraz, Haar příznaků a~AdaBoost algoritmus)
+\end{itemize}
+Integrální obraz je takový obraz (obrázek \ref{fig:integralimage}), kde každý bod $x$ představuje součet hodnot předchozích pixelů doleva a~nahoru. Spodní pravý bod obsahuje součet všech pixelů v~obraze.
+Zápis integrálního obrazu je:
 \begin{equation*}
-    H(u, v) = \frac{1}{1 + \left( \frac{D(u, v)}{D_0} \right)^{\frac{2}{n}}}, \quad \textrm{kde } D(u, v)=\sqrt{(u - u_c)^2 + (v - v_c)^2}
+    \label{integralimage}
+    I(x, y) = \sum_{\substack{x' \leq x \\ y' \leq y}}{} i(x', y'),
 \end{equation*}
-kde $d(x, y)$ představuje běženě používanou L2-normu a $n$ je řád filtru (nejčastěji 1 nebo 2).
+kde $i(x', y')$ je hodnota pixelu na pozici $(x, y)$.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.4\textwidth}
+        \centering
+        \includegraphics[width=.5\linewidth]{assets/9_ii_input}
+        \caption{Vstupní obraz}
+        \label{fig:ii_input}
+    \end{minipage}%
+    \begin{minipage}{.4\textwidth}
+        \centering
+        \includegraphics[width=.5\linewidth]{assets/9_ii_output}
+        \caption{Integrální obraz}
+        \label{fig:ii_output}
+    \end{minipage}
+    \caption{Převod obrazu na integrální obraz}
+    \label{fig:integralimage}
+\end{figure}
+
+Princip využití Haarových příznaků v~obrazech je založen na pozorování, že lidská těla a~obličeje mají některé podobné rysy. Právě tyto rysy mohou být porovnány pomocí Haarových příznaků. Jedná se například o~tyto rysy:
+\begin{itemize}
+    \item{Oční oblast je tmavší než oblast nosního mostu,}
+    \item{hlava člověka je tmavší než její okolí,}
+    \item{oblast mezi dolními končetinami je světlejší než samotné nohy.}
+\end{itemize}
+Sada Haarových vlnek je na obrázku \ref{fig:basichaarfeatures}, jedná se pouze o~základní sadu příznaků.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.4\linewidth]{assets/9_haar_features}
+    \caption{Základní sada Haarových příznaků}
+    \label{fig:basichaarfeatures}
+\end{figure}
+
+Pro identifikaci lidských postav se používá rozšířená sada vlnek, tzv. Haar--like příznaky. Klasifikační systém založený na těchto Haar--like příznacích dosahuje nižší falešně pozitivní detekce než původní Haar příznaky. Na obrázku \ref{fig:haarlike} je příklad detekce pomocí Haar--like vlnek. \textbf{Hodnota příznaku je rozdíl mezi sumou hodnot pixelů v~bílé a~černé oblasti} Haarových vlnek.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\linewidth]{assets/9_haar-like}
+    \caption{Použití Haar--like příznaků na chodcích}
+    \label{fig:haarlike}
+\end{figure}
+
+\section{LBP Lokální binární vzor}
+Hlavní myšlenkou LBP je, že struktury obrazu mohou být efektivně zakódovány \textbf{porovnáním hodnot jednotlivých pixelů a~jejich okolí}. Tato metoda je odolná vůči jasovým změnám obrazu.
+\begin{enumerate}
+    \item převod obrazu do stupňů šedi a~jeho rozdělení do buněk
+    \item okolní hodnoty pixelů jsou porovnávány se středovým pixelem, pokud je jejich hodnota rovna nebo větší zapíše se na tuto pozici jednička v~opačném případě nula
+    \item tyto hodnoty seřadíme dle hodinových ručiček nebo naopak a~získáme osmimístné binární číslo a převedeme do dekadické soustavy
+    \item z~čísel, které jsme získali kombinací pixelů v~buňkách, vypočítáme histogram
+    \item zřetězíme všechny histogramy buněk a~získáme vektor příznaků pro celý obraz (jedná se o~256--dimenzionální vektor příznaků)
+\end{enumerate}
+Matematicky lze LPB vyjádřit jako:
+\begin{equation*}
+    LBP_{P,R} = \sum_{p=0}{P-1} s(g_p - g_c)2^P, \\
+    s(x) =
+    \begin{cases}
+        1 & \text{pro } x \geq 0, \\
+        0 & \text{pro } x < 0,
+    \end{cases}
+\end{equation*}
+kde: $P$ je počet bodů v~okolí, $R$ vyjadřuje vzdálenost bodů od středového pixelu, $g_c$ je středový pixel, $g_p$ je aktuální pixel.
+
+Následující příklad se vztahuje k~obrázku \ref{fig:lbpsum}. Po porovnání pixelů se středovým pixelem jsme získali vzor $11110001$. Tento vzor převedeme do dekadické soustavy a~sečteme, $ 1+16+32+64+128 = 241$. \textbf{Získali jsme hodnotu této buňky do vektoru příznaků}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{assets/7_ftt_filtery}
+    \begin{minipage}[b]{.3\textwidth}
+        \centering
+        \includegraphics[width=.5\linewidth]{assets/9_lbp_img}
+        \caption*{Vstupní buňka}
+        \label{fig:lpbimg}
+    \end{minipage}%
+    \begin{minipage}[b]{.3\textwidth}
+        \centering
+        \includegraphics[width=.5\linewidth]{assets/9_lbp_thresh}
+        \caption*{Prahové hodnoty}
+        \label{fig:lbpthresh}
+    \end{minipage}
+    \begin{minipage}[b]{.3\textwidth}
+        \centering
+        \includegraphics[width=.5\linewidth]{assets/9_lbp_weights}
+        \caption*{Pixely ohodnoceny váhou}
+        \label{fig:lbpweights}
+    \end{minipage}
+    \caption{Výpočet příznaku}
+    \label{fig:lbpsum}
 \end{figure}
+
+Výhoda této metody je její rychlý a~snadný výpočet a~odolnost vůči různým osvětlením. Na druhou stranu je těžší na trénování, protože výsledné dekadické číslo může mít obrovské množství možností (podle parametru $P$). K~omezení lze využít uniformní vzory (obrázek \ref{fig:lbpvzory}). Pro parametr $P=8$, získáme 59 vzorů.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{.18\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{assets/9_lbp_spot}
+        \caption*{Bod}
+    \end{minipage}
+    \begin{minipage}[b]{.18\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{assets/9_lbp_spot_flat}
+        \caption*{Bod/Plocha}
+    \end{minipage}
+    \begin{minipage}[b]{.18\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{assets/9_lbp_line}
+        \caption*{Křivka}
+    \end{minipage}
+    \begin{minipage}[b]{.18\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{assets/9_lbp_corner}
+        \caption*{Roh}
+    \end{minipage}
+    \begin{minipage}[b]{.18\textwidth}
+        \centering
+        \includegraphics[width=.9\linewidth]{assets/9_lbp_edge}
+        \caption*{Hrana}
+    \end{minipage}
+    \caption{Lokální okolí LBP metody}
+    \label{fig:lbpvzory}
+\end{figure}
+
+\section{Klasifikátory}
+Klasifikace je obecný proces kategorizující objekty do určitých tříd. Termín klasifikátor někdy odkazuje také na matematickou funkci, implementovanou klasifikačním algoritmem.
+\subsection*{SVM Support vector machines} % @TODO
+\begin{itemize}
+    \item První algoritmus přisuzován Vladimíru Vapnikovi (1963)
+    \item Učební modely, které jsou velmi populární v~oblasti strojového učení.
+    \item Založena na tzv. \textbf{jádrových algoritmech} (kernel machines) s~využitím \textbf{podpůrných vektorů} (support vectors).
+    \item Původně tato technika sloužila k~vytvoření optimálního binárního klasifikátoru, později byla rozšířena na řešení \textbf{problému regrese} a~\textbf{shlukování}.
+    \item Byly úspěšně použity ve třech hlavních oblastech: kategorizace textu, rozpoznání obrazu a~bioinformatika (např. třídění novinových zpráv, rozpoznávání ručně psaných čísel nebo například vzorky rakovinových tkání).
+\end{itemize}
+
+Primárním cílem SVM je nalézt \textbf{nadrovinu}, která \textbf{optimálně rozděluje prostor} příznaků tak, aby trénovací data náležela do konkrétních tříd. Tuto nadrovinu ilustruje obrázek \ref{fig:svm}. Pokud mezera mezi oddělující nadrovinou a~nejbližšími vektory příznaků z~obou kategorií (v~případě binárního klasifikátoru) je maximální, jedná se o~optimální řešení. Vektory příznaků v~blízkosti této nadroviny se nazývají podpůrné vektory, což znamená, že pozice ostatních vektorů nemá vliv na nadrovinu (rozhodovací funkce).
+
+Jinými slovy, se jedná o~diskriminační klasifikátor formálně definovaný rozdělovací nadrovinou, která kategorizuje nové příklady.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.71\linewidth]{assets/9_svm.pdf}
+    \caption{Optimální oddělovací hranice}
+    \label{fig:svm}
+\end{figure}
+
+Implementaci SVM lze nalézt v~již existujících knihovnách, jako jsou například LIBSVM, kernlab, scikit-learn, SVMLight..
+\begin{itemize}
+    \item\textbf{$C$--Support vektorová klasifikace ($C$--SVC)} --
+          Umožnuje nedokonalé oddělení tříd pro $n$--tříd ($n > 2$) s~postihovým multiplikátorem $C$, pro odlehlé hodnoty ($C > 0$).
+    \item\textbf{$\nu$--Support vektorová klasifikace ($\nu$--SVC)} --
+          $n$--třídní klasifikace s~možností nedokonalé separace. Tato klasifikace přidává nový parametr $\nu \in (0;1\rangle$, čím větší je jeho hodnota, tím hladší je rozhodovací funkce.
+    \item\textbf{Distribuční odhad (Jednotřídní SVM)} --
+          Distribution Estimation (One-class SVM), jak již název sám o~sobě napovídá všechny trénovací data pocházejí z~jedné třídy, SVM vytvoří hranici, která odděluje třídu od zbývající části.
+    \item\textbf{$\varepsilon$--Support vektorová regrese ($\varepsilon$--SVR)} --
+          Vzdálenost mezi vektory příznaků a~rozdělovací nadrovinou musí být menší než mez tolerance $\varepsilon$. Pro odlehlé hodnoty opět použijeme multiplikátor $C$. Musí tedy platit: $C > 0$ a~$\varepsilon > 0$.
+    \item\textbf{$\nu$--Support vektorová regrese ($\nu$--SVR)} --
+          Tato klasifikace je podobná jako $\varepsilon$--SVR. Na místo $\varepsilon$ se použije parametr $\nu \in (0;1\rangle$.
+\end{itemize}
+Účinnost SVM závisí na výběru správného jádra a~jeho parametrů. Často se používá Gaussovo jádro s~jedním parametrem $\gamma$. Díky jeho přesnosti, ale je časově náročné. V~této knihovně se můžeme setkat s~následujícími jádry.
+\begin{itemize}
+    \item\textbf{Lineární jádro} --
+          Použití tohoto jádra je velmi rychlé (bez jakékoliv transformace), jedná se o~lineární diskriminaci a~rozdělovací nadrovina bude vždy přímka. Pro toto jádro platí
+          \begin{equation*}
+              \label{linearK}
+              K(x_i, x_j) = x_i^T x_j,
+          \end{equation*}
+          kde $x_i$ a~$x_j$ jsou vektory vstupního prostoru.
+
+    \item\textbf{Polynomické jádro} --
+          Polynomické jádro umožňuje učení nelineárních modelů
+          \begin{equation*}
+              \label{polyK}
+              K(x_i, x_j) = (\gamma x_i^T x_j + c)^{d}, \gamma > 0,
+          \end{equation*}
+          kde: $c \geq 0$, volný parametr, který vylučuje vliv vyššího řádu oproti polynomu nižšího řádu (pokud $c = 0$, jádro je homogenní), řád polynomu určuje parametr $d$.
+
+    \item\textbf{Gaussovo jádro} --
+          Gaussovo neboli RBF (Radial Basis Function) jádro se řadí mezi nejpoužívanější a~je definované jako
+          \begin{equation*}
+              \label{RBFK}
+              K(x_i, x_j) = e^{-\gamma ||x_i - x_j||^2}, \gamma > 0,
+          \end{equation*}
+          kde: $||x_i - x_j||^2$ značí kvadratickou euklidovskou vzdálenost mezi dvěma vektory příznaků.
+
+    \item\textbf{Sigmoidní jádro} --
+          toto jádro je podobné sigmoidní funkci v~logistické regresi
+          \begin{equation*}
+              \label{sigmK}
+              K(x_i, x_j) = \tanh(\gamma x_i^T x_j + r),
+          \end{equation*}
+          kde $r$ je volitelný parametr.
+
+    \item\textbf{Exponenciální jádro} --
+          Exponenciální jádro $\chi$2 je podobné RBF jádru a~využívá se převážně na histogramy
+          \begin{equation*}
+              \label{expK}
+              K(x_i, x_j) = e^{-\gamma \chi^2(x_i,x_j)}, \chi^2(x_i,x_j) = \frac{(x_i-x_j)^2}{(x_i+x_j)}, \gamma > 0,
+          \end{equation*}
+
+    \item\textbf{Jádro histogramu průsečíků} --
+          Toto jádro je také známé jako \textit{Min Kernel}, jedná se o~nejnovější jádro v~této knihovně a~je velmi rychlé a~užitečné při klasifikaci
+          \begin{equation*}
+              \label{innK}
+              K(x_i, x_j) = min(x_i,x_j).
+          \end{equation*}
+\end{itemize}
+
+\subsection{Kaskádové klasifikátory} % @TODO
+\begin{itemize}
+    \item Skládá \textbf{z~více slabších} klasifikátorů umístěných v~\textbf{kaskádách} za sebou.
+    \item Požadavky na tento druh klasifikátoru byly \textbf{rychlost} detekce, aby mohl být implementován na procesorech s~nižším výkonem. (v kamerách, v telefonech..)
+    \item Klasifikátory si mezi sebou \textbf{předávají všechny} informace o~vstupním obraze (může se redukovat čas, nutný pro detekci v~daném obraze).
+    \item Prvním takovým klasifikátorem byl detektor obličeje \textbf{Viola--Jones}
+\end{itemize}
+Klasifikátor na první vrstvě může vyfiltrovat většinu negativních oken. Na druhé vrstvě se mohou odfiltrovat \uv{těžší} negativní okna, která přežila z~první vrstvy a~tak dále. Subokno, které přežije všechny vrstvy, bude označeno jako pozitivní detekce. Příklad řetězce kaskádového klasifikátoru je ilustrován na obrázku \ref{fig:ccpipeline}, kde $K1$--$KN$ je klasifikátor první až $n$--té vrstvy.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.6\linewidth]{assets/9_cascadeClass.pdf}
+    \caption{Ukázka pipeline kaskádového klasifikátoru}
+    \label{fig:ccpipeline}
+\end{figure}
+
+\subsection{AdaBoost}
+\begin{itemize}
+    \item \textbf{AdaBoost}, neboli Adaptive Boosting
+    \item klasifikátor \textbf{kombinuje} slabé klasifikátory k~vytvoření jednoho silného klasifikátoru
+\end{itemize}
+V~kombinaci více klasifikátorů s~výběrem trénovací sady v~každé iteraci algoritmu a~přidělení správné váhy na konci trénování, docílíme klasifikátoru s~dobrou přesností. Klasifikátory v~tomto řetězci, které mají klasifikační přesnost menší než 50\%, jsou ohodnoceny zápornou vahou. Váhou nula jsou ohodnoceny klasifikátory, které mají přesnost 50\%. Pouze ty, keré mají přesnost vyšší než 50\%, jsou přínosné do této kombinace a~můžeme hovořit o~zesílení (boosting) klasifikace.

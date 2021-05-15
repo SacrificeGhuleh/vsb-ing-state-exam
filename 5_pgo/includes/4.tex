@@ -1,171 +1,249 @@
-%Geometrické a objemové modelování. Hraniční metoda, metoda CSG, výčet prostoru, oktantové stromy.
+%Standardní zobrazovací řetězec a realizace jeho jednotlivých kroků. Gouraudovo a Phongovo stínování. Řešení viditelnosti. Grafický standard OpenGL: stručná charakteristika.
+\section{Standardní zobrazovací řetěz}
+Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{assets/5_retezec}
+\end{figure}
 
-\section{Geometrické a objemové modelování}
+\begin{enumerate}
+    \item  \textbf{Pokrytí povrchu objektů sítí rovinných plošek:}
+          \begin{itemize}
+              \item Ploškami bývají nejčastěji \textbf{trojúhelníky} nebo čtyřúhelníky.
+              \item Pro objekty ve tvaru mnohostěnu je takové dělní vcelku samozřejmé.
+              \item K \textbf{přesnějšímu výpočtu }barev bývá, ale někdy dělení na plošky \textbf{jemnější}.
+              \item Někdy síť rovinných plošek žádaný povrch pouze aproximuje.
+          \end{itemize}
+    \item \textbf{Výpočet osvětlení ve vrcholech sítě} -- k tomu známe:
+          \begin{itemize}
+              \item Polohu, intenzitu a barvu světelných zdrojů.
+              \item Souřadnice vrcholů ($P$), normál ($n$) a konstanty popisující optické vlastnosti materiálu ($O_a, O_d, O_s$).
+              \item V tomto kroku je počítán barevný vjem každého vrcholu.
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.4\textwidth]{assets/5_vypocet_barevneho_vjemu}
+                    \end{figure}
+          \end{itemize}
+    \item \textbf{Aplikace zobrazovací transformace na vrcholy}
+          \begin{itemize}
+              \item Oblíbenou technikou je středové promítání, to je zadáno:
+                    \begin{itemize}
+                        \item Polohou průmětny.
+                        \item Polohou středu promítání.
+                    \end{itemize}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.5\textwidth]{assets/5_stred_promitani}
+                    \end{figure}
+          \end{itemize}
+    \item \textbf{Ořezání zorným objemem}
+          \begin{itemize}
+              \item Objekty nebo jejich části, nacházející se mimo zorný objem (obvykle jehlan) jsou odstraněny.
+          \end{itemize}
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.5\textwidth]{assets/5_orezani_zornym_pole}
+          \end{figure}
+          %\begin{enumerate}
+    \item \textbf{Rasterizace plošek}
+          \begin{itemize}
+              \item Postupně se zpracovávají všechny plošky.
+              \item Pro každou plošku jsou ,,rozsvěceny'' všechny její pixely.
+              \item Barva každého pixelu se stanoví \textbf{interpolací mezi hodnotami ve vrcholech}.
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.5\textwidth]{assets/5_rasterizace_plosek}
+                    \end{figure}
+          \end{itemize}
+    \item[5.1] \textbf{Řešení viditelnosti (z--buffer)}
+          \begin{itemize}
+              \item Pro rozhodnutí viditelnosti se použijí hodnoty souřadnice $z$ (zde je $z_1 > z_2$).
+              \item Před řešením viditelnosti bývá středové promítání převedeno na rovnoběžné.
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.5\textwidth]{assets/5_pip_zbuffer}
+                    \end{figure}
+          \end{itemize}
+    \item[5.2] \textbf{Nanášení textury}
+          \begin{itemize}
+              \item Vzhled obrázků lze vylepšit nánášením textury.
+          \end{itemize}
+\end{enumerate}
+
+\section{Stínování (shading)}
 \begin{itemize}
-    \item Geometrické modelování \textbf{zkoumá reálné objekty z hlediska geometrických vlastností}.
-    \item Je to \textbf{soubor metod k popisu těles}. Rozlišujeme \textbf{3 základní typy modelů} (příklady jsou uvedeny pro \textit{trojboký hranol}):
+    \item Vykreslování barevných objektů \textbf{různými odstíny barev}.
+    \item Lze odlišit křivosti ploch a tím docílit lepšího prostorového vjemu.
+    \item Neplést s výpočtem vrženého stínu.
+    \item Základní typy: \textbf{Konstantní} stínování, \textbf{Gouraudovo} stínování (Interpolace barvou), \textbf{Phongovo} stínování (Interpolace normálových vektorů).
+\end{itemize}
+\section{Gouraudovo stínování (Interpolace barvou)}
+Princip metody spočívá v tom, že pokud budeme znát \textbf{normálu} v každém \textbf{vrcholu} každé plochy objektu, pak lze vypočítat barvu v tomto vrcholu a \textbf{interpolací} vypočítat \textbf{barvu pixelu uvnitř plošky} (bilineární interpolace).
+
+Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálných objektů - interpolace samotného odstínu barvy totiž \textbf{nemůže} způsobit místní zvýšení jasu na plošce, stejně jako nemůže kvalitně vytvořit \textbf{odlesky} způsobené odraženým světlem. Dá se říci, že tato metoda zahlazuje barevné rozdíly u místních nerovností povrchu.
+
+\textbf{Normálový vektor} pro každý vrchol vypočteme jako aritmetický průměr normálových vektorů plošek, které se v tomto vrcholu stýkají.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/5_gouraud}
+\end{figure}
+
+\begin{enumerate}
+    \item Vypočteme \textbf{normálové vektory pro všechny plošky} ze kterých je objekt složený.
+    \item Pro každý vrchol spočítáme \textbf{normálový vektor} v tomto vrcholu jako \textbf{průměr normálových vektorů plošek}, které se v tomto vrcholu stýkají.
+    \item Z normálových vektorů ve vrcholech a pozice světelného zdroje vypočteme \textbf{barvy ve vrcholech plošek}.
+    \item Provedeme \textbf{interpolaci} barvy pro \textbf{body jednotlivých plošek}.
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{assets/5_gouradovo}
+\end{figure}
+\subsection*{Výhody}
+\begin{itemize}
+    \item[$+$] umožnuje dobře zobrazit i hladké objekty,
+    \item[$+$] používá se jako nejčastější metoda stínování.
+\end{itemize}
+\subsection*{Nevýhody}
+\begin{itemize}
+    \item[$-$] nevznikají ostré odlesky uprostřed polygonů.
+\end{itemize}
+\section{Phongovo stínování (Interpolace normálových vektorů)}
+\begin{itemize}
+    \item Provádí se \textbf{interpolace normálových vektorů} jednotlivých vrcholů, Interpolaci provádíme po řádcích.
+    \item Touto metodou se \textbf{odstraní problém neostrých odlesků}.
+    \item Je \textbf{náročnější} na výpočet než goraudovo stínování, jelikož se počítá výsledná barva v každém bodě plošky (ne pouze ve vrcholech).
+    \item Pro normálové vektory lze psát:
+          \begin{equation*}
+              \begin{split}
+                  n_A &= n_1 + (n_2 - n_1) \cdot u; \, u <0, 1>, \\
+                  n_B &= n_1 + (n_3 - n_1) \cdot w; \, w <0, 1>, \\
+                  n_Q &= n_A + (n_B - n_A) \cdot t; \, t <0, 1>, \\
+              \end{split}
+          \end{equation*}
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/5_phong_stin}
+\end{figure}
+\section{Řešení viditelnosti}
+\begin{itemize}
+    \item Podle výsledných dat:
+          \begin{itemize}
+              \item \textbf{Vektorové algoritmy} -- geometrické prvky vrcholy, hrany a stěny. Výstupem je vektorové řešení.
+              \item \textbf{Rastrové algoritmy} -- výsledkem je rastrový obraz (jednotlivé pixely obsahují barvu), většina současných metod.
+          \end{itemize}
+    \item Podle místa řešení:
+          \begin{itemize}
+              \item \textbf{Řešení v prostoru objektů} -- proovnávání vzájemné polohy těles $0(n^2)$.
+              \item \textbf{Řešení v prostoru obrazu} -- pracujeme s promítnutými a rasterizovanými objekty. Pro pixely hledáme nejbližší objekty.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Rastrové algoritmy}
+\begin{enumerate}
+    \item \textbf{Malířův algoritmus} (Painter's algorithm) -- porovnává plochy z hlediska jejich $z$--tových souřadnic (plocha s menší $z$--tovou souřadnící bude kreslena první), jestliže se plochy \textbf{nepřekrývají}, potom na pořadí kresby nezáleží, pokud se protínají -- rozdělit na nepřekrývající se plochy.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.5\textwidth]{assets/5_malir}
+          \end{figure}
+    \item \textbf{Dělení obrazovky }(Warnock subdivision)
           \begin{enumerate}
-              \item \textbf{Drátěný model} --  je určen seznamem devíti \textbf{hran}.
-              \item \textbf{Hraniční model} -- je určen seznamem pěti \textbf{stěn}.
-              \item \textbf{Objemový model} -- je určen \textbf{velikostí stran podstavy} a \textbf{výškou} (CSG).
+              \item Všechny plošky leží mimo zónu - zůstane barva pozadí.
+              \item Oblast obsahuje právě jeden celý n-úhelník. Daná oblast se vyplní barvou a zbytek pozadím.
+              \item Oblast protíná právě jeden n-úhelník. Daná část se vyplní barvou, zbytek pozadí.
+              \item Pokud zobrazovaná část je celá uvnitř jednoho n-úhelníka, potom se celá oblast zobrazí barvou nejbližšího n-úhelníka, který oblast obklopuje.
+              \item Pokud nenastane jeden z vyjmenovaných případů - oblast se rozdělí.
           \end{enumerate}
-    \item \textbf{Objemové reprezentace} těles nesou přímé informace o vnitřních objemech těles a používají se i jako pomocné datové struktury vzhledem k rychlému zpracování. Oproti tomu povrchové reprezentace těles nesou přímé informace o povrchu tělesa (např. hrany, stěny) a poměrně snadno se zobrazují.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{assets/4_modely}
-\end{figure}
-
-\section{N-maniflod v E$^M$}
-N-manifold v topologii představuje topologický prostor, který lokálně připomíná reálný n-dimenzionální prostor. N-manifold je takový topologický manifold, jehož \textbf{každý bod} má okolí homeomorfní s $\mathbb{R}^n$. V podstatě definuje hranice (\textbf{povrch}) tělesa. \textbf{Je taková podmnožina E$^m$, kde $m \geq n$, která je homeomorfní s E$^n$.}
-\begin{itemize}
-    \item \textbf{1-manifold} je například kruh (nemá žádný povrch).
-    \item \textbf{2-manifold} (v 3D prostoru) je \textbf{povrch tělesa}, s kterým lze jednoduše manipulovat (rozdělit rovinou, naříznout (nová hrana)).
-    \item \textbf{3-manifold} (v 3D prostoru) je \textbf{povrch s dírami}, s tímto tělesem už se tak jednoduše nedá manipulovat.
-\end{itemize}
-
-\section{Drátěné (hranové) modely (wireframe model)}
-\begin{itemize}
-    \item Drátěné modely jsou reprezentovány \textbf{hranami objektu} a skládají se z \textbf{bodů}, \textbf{přímek} a \textbf{křivek}.
-    \item První wireframe systémy byly pouze dvou-dimenzionální, používaly se především na návrhy tištěných spojů. Základními elementy těchto systémů byly body, přímky a oblouky některých kuželoseček. Vnitřní reprezentaci tvořil obvykle seznam úseček a oblouků.
-    \item V 70. letech byla wireframe reprezentace použita i pro \textbf{modelování v prostoru}. Zde však vznikaly dost závažné \textbf{problémy}:
-          \begin{itemize}
-              \item možnost vytvoření nejednoznačných modelů,
-              \item možnost vytvoření nesmyslných modelů,
-              \item problém velkého počtu dat pro ,,drátěný'' popis objektu.
-          \end{itemize}
-    \item Průmět drátěného modelu může mít více významů.
-    \item Pokud u modelu \textbf{vynecháme} některé \textbf{hrany}, dostaneme \textbf{nesmyslný} (nonsense) model.
-    \item U wireframe modelů je velice obtížné kontrolovat jejich \textbf{logickou správnost}.
-    \item Poslední nevýhodou je \textbf{značné množství dat}, které jsou nutné pro úplný popis objektu.
-    \item \textbf{Například:} obecně pro jednoznačné určení kvádru v prostoru stačí výška, šířka, hloubka a poloha. Wireframe model kvádru musí obsahovat souřadnice osmi vrcholů, musí být určeno dvanáct hran a ještě není model jednoznačný.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{assets/4_dratovy_model}
-\end{figure}
-
-\section{Hraniční metoda (hraniční model)}
-\begin{itemize}
-    \item Tato reprezentace patří k \textbf{nejpoužívanějším} typům při geometrickém popisu objektů.
-    \item Historicky vyžadovala hranici \textbf{2-manifold v E$3$}, což znemožňovalo použití např. těles, která se sama sebe dotýkají (obrázek dole vlevo). Na druhou stranu byly pro uvedenou třídu těles velice dobře prozkoumány topologické vlastnosti. Tento požadavek byl však později \textbf{revidován} (boleaovské operace nemohou zaručit výsledek v 2-manifold E$^3$, obrázek dole vpravo).
-    \item Metoda reprezentace tělesa pomocí hranice, spočívá v tom, že \textbf{těleso je dáno svou hranicí} (povrchem), která je \textbf{orientována} a dělí tedy prostor na dvě části - \textbf{vnitřek} tělesa a \textbf{vnějšek} tělesa.
-    \item Popis tělesa je rozdělen na dvě části:
-          \begin{itemize}
-              \item \textbf{topologická} - popisuje vzájemné \textbf{vztahy} mezi entitami tělesa (vztahy mezi stěnami, hranami a vrcholy),
-              \item \textbf{geometrická} - popisuje \textbf{umístění} entit tělesa v \textbf{prostoru} (souřadnice prostorů, rovnice ploch, ...).
-          \end{itemize}
-    \item Těleso je definováno těmito informacemi:
-          \begin{itemize}
-              \item	\textbf{seznam povrchů (shell)}, které těleso omezují,
-              \item	\textbf{seznam stěn (face)} definující povrch tělesa,
-              \item	\textbf{seznam smyček (loop)}, které definují stěny. Jde o \textbf{orientované hrany}. Obsahuje-li stěna jednu smyčku, jde o stěnu bez děr. Je li dána více smyčkami jsou ve stěně tunely. \textbf{Směr rotace} smyčky udává \textbf{normálu} stěny a určuje tedy na které straně stěny je \textbf{vnitřek} tělesa a která strana je \textbf{vnější} (smyčka proti směru hodinových ručiček – stěna z vnějšku). Je‑li uprostřed stěny, jde o díru (tunel).
-              \item	\textbf{seznam hran (edge)} definující smyčky.
-          \end{itemize}
-    \item Né všechny uvedené informace (o dírách, stěnách atd) musí být explicitně zaznamenány v datové struktuře, je však žádoucí aby je bylo možné \textbf{rychle dopočítat}.
-    \item Jednou z hraniční reprezentací těles je datová struktura zvaná \textbf{okřídlená hrana} daná hranou a dvěma plochami k ní přiléhajícími.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{assets/4_hranicnic_manifold}
-\end{figure}
-
-\subsection{Okřídlená hrana}
-Okřídlená hrana je \textbf{datová struktura} pro reprezentaci polygonových modelů taková, že jasně definuje jejich geometrii a topologii stěn, hran a vrcholů.
-
-\begin{itemize}
-    \item Umožňuje jednoduchý průchod po jednotlivě spojených hranách, stěnách a bodech díky vzájemně propojeným strukturám.
-    \item Okřídlené hraně přiléhají 2 stěny \textbf{nalevo} a \textbf{napravo} od ní. Zároveň si uchovává informaci o \textbf{následujících} a \textbf{předcházejících} hranách podél každé ze stěn, které jsou uspořádány po směru hodinových ručiček.
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/4_okridlena_hrana}
-\end{figure}
-
-\subsection{Eulerovy operátory hraniční reprezentace}
-Slouží k obsluze datových struktur hraniční reprezentace. Modifikují datovou strukturu tak, aby vždy popisovala nějaké těleso (jinými slovy, lze pomocí nich vytvářet nová tělesa). Pro jednoduché mnohostěny (uzavřené bez otvorů) platí následující \textbf{Eulerova formule}:
-\begin{equation*}
-    V + F - E = 2,
-\end{equation*}
-
-kde $ V $ je počet vrcholů, $ E $ je počet hran a $ F $ je počet stěn. Pro mnohostěny s otvory platí \textbf{zobecněná Eulerova formule}:
-\begin{equation*}
-    V + F - E = H + 2(B - P),
-\end{equation*}
-
-kde $ B $ (Body) je počet disjunktních částí tělesa, $ H $ (Hole) je počet otvorů ve stěnách a $ P $ (Passage) je počet děr v tělese.
-
-\begin{itemize}
-    \item \textbf{Základní operace} -- \texttt{createSolid} (vytvoří minimální neprázdné těleso), \texttt{splitEdge} (rozdělí zadanou hranu vložením nového vrcholu), \texttt{splitFace} (rozdělí zadanou stěnu vložením nové hrany).
-    \item \textbf{Další operace} -- \texttt{splitSolid} (provede řez nějakého tělesa ořezovou rovinou).
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{assets/4_hranicni_euler}
-\end{figure}
-
-\textbf{Příklad:} Na obrázku výše (číslo 2) je postup vytvoření kvádru. Nejprve se zavolá \texttt{createSolid} a pak $3 \times$ \texttt{splitEdge} $\rightarrow$ tím výchozí výsledek čtverec (vlevo nahoře). Dále se pak střídá použití operátorů \texttt{splitFace} a \texttt{splitEdge} dokud není vytvořena taková struktura hran a vrcholů jako obrázek vpravo dole.
-
-\section{Metoda CSG (objemový model)}
-\begin{itemize}
-    \item \textbf{Constructive Solid Geometry} je metoda reprezentace těles, kdy jsou tělesa tvořena za pomocí standardních \textbf{primitivních těles} (kvádr, hranol, válec, kužel, koule, toroid, …), \textbf{regularizovaných booleovských operací} a \textbf{geometrických transformací}.
-    \item Uživatel si naskládá primitivní (či dříve vytvořené) tělesa do prostoru a aplikuje na ně boolovské operace jako sjednocení, průnik, rozdíl, čímž vznikne nový útvar.
-    \item Z hlediska \textbf{datové struktury} jsou tělesa popsány stromem. \textbf{Listy} stromu odpovídají primitivním tělesům a transformacím, vyčteme z nich tedy rozmístění a velikosti těles. Zbylé uzly tvoří \textbf{boolovské operace} které jsou nad tělesy vykonány.
-    \item CSG strom je \textbf{binární}, pokud chápeme boolovské operace jako binární, jinak tomu být nemusí.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.6\textwidth]{assets/4_csg}
+              \includegraphics[width=0.5\textwidth]{assets/5_warnock}
           \end{figure}
-    \item Výhoda stromové struktury je že uchovává \textbf{historii} modelace tělesa, kterou lze využít při další úpravě.
-    \item Další výhodou CSG tohoto přístupu je \textbf{jednoduchost boolovských operací}.
-    \item Na rozdíl od hraniční metody, není třeba náročného výpočtu hranic nového tělesa.
+    \item \textbf{Plovoucí horizont} (Floating Horizon Algorithm) -- metoda \uv{zig--zag}, počítáme od \uv{nejbližšího} rohu plochy k \uv{oku} pozorovatele.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.5\textwidth]{assets/5_horizont}
+          \end{figure}
+    \item \textbf{Paměť hloubky} (\textbf{Z--buffer}, depth--buffer)
+          \begin{enumerate}
+              \item Vyplň obrazovou paměť barvou pozadí.
+              \item Vyplň paměť hloubky -- nekonečnem.
+              \item Pro každou plochu najdi její průměť (rasterizaci) nalezenému pixelu $[x_i,y_i]$ přiřaď hloubku $z_i$.
+              \item Porovnej hloubku a zapiš do paměti, pokud je hloubka menší překreslí se nový pixel daným objektem.
+          \end{enumerate}
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.7\textwidth]{assets/5_zbuffer}
+          \end{figure}
+          \begin{itemize}
+              \item \textbf{Nejznámější} a \textbf{nejefektivnější} metoda.
+              \item Každá plocha se zpracovává \textbf{pouze jednou}.
+              \item \textbf{Doba zpracování roste s počtem ploch lineárně} (záleží i na velikosti ploch).
+              \item Není potřeba žádné třídění nebo pomocné datové struktury.
+              \item Možnost \textbf{paralelních} procesů.
+              \item Z-buffer je často realizován jako 2D pole, kdy se ukládá pouze aktuální hodnota z (nejmenší).
+          \end{itemize}
+    \item \textbf{Z--buffer -- paměť hlouby -- průhlednost - princip}
+          \begin{enumerate}
+              \item Inicializuj \textbf{color buffer} a \textbf{depth buffer}.
+              \item Postupně načti všechny plochy, neprůhledné zpracuj, průhledné si zapamatuj a odlož pro následné zpracování.
+              \item Po zpracování neprůhledných ploch setřiď průhledné plochy podle vzdálenosti.
+              \item Zpracuj průhledné plochy s použitím \textbf{alfa míchání}.
+          \end{enumerate}
+\end{enumerate}
+\section{Grafický standard OpenGL: stručná charakteristika}
+\begin{itemize}
+    \item OpenGL je \textbf{multiplatformní} standard poskytující rozhraní (\textbf{API}) pro zobrazování 2D a 3D objektů. Je podporován takřka všemi výrobci grafických karet.
+    \item Používá se pro tvorbu \textbf{PC Her}, \textbf{CAD programů}, aplikací \textbf{virtuální reality} či pro  \textbf{vědecko-techické vizualizace}.
+    \item Veškerá činnost OpenGL se řídí vykonáváním příkazů pomocí \textbf{volání funkcí} a procedur (kterých je v OpenGL cca 250).
+    \item Byla vytvořena tak, aby byla \textbf{nezávislá} na použitém \textbf{operačním systému} nebo \textbf{programovacím jazyce}. Specifikace OpenGL tedy \textbf{neříká nic} o řízení kontextu platformy, \textbf{správě} a vytváření \textbf{oken}, \textbf{audio} a \textbf{vstupu}. Řešení této problematiky je necháno na \textbf{podpůrných systémech} (které jsou většinou platformě specifické) a OpenGL se zabývá pouze vykreslováním.
+    \item Z programátorského hlediska se OpenGL chová jako \textbf{stavový automat}. To znamená že pokud změníme nějaké nastavení, toto nastavení zůstane až do doby než jej znovu změníme. To se hodí např. kdy jediným příkazem jsme schopni přepnout program do kreslení ve ,,wireframe módu''.
+    \item Programátorské rozhraní knihovny OpenGL je vytvořeno tak, aby knihovna byla použitelná v téměř \textbf{libovolném programovacím jazyce}. Primárně je k dispozici hlavičkový soubor pro jazyky C a C++. Existují však i podobné soubory s deklaracemi pro další programovací jazyky, například Fortran, Object Pascal či Javu; tyto soubory jsou většinou automaticky vytvářeny z Cčkovských hlavičkových souborů.
 \end{itemize}
 
-\section{Výčet prostoru - BSP stromy}
-Při vykreslování objektů v prostoru narazíme na problém co vykreslit dřív a co později, aby to co je blíže pozorovateli překrývalo to co je od něj dál. Nejjednodušším algoritmem je \textbf{malířův algoritmus}, ten postupně vykresluje objekty seřazené od nejvzdálenějšího k nejbližšímu. Na obrázku (1) níže je však ukázaný problém, s kterým si neporadí. Toto řeší BSP stromy.
+\subsection{Core-profile vs Immediate mode}
+Ve starších verzích OpenGL (před 3.2, kde se stal deprecated) se vyvíjely aplikace v tzv. \textbf{immediate módu} (non-shader mód). Tento mód byl značně \textbf{jednodušší} než core-profile, jelikož zakrýval (abstrahoval) většinu funkcionality OpenGL pod danou knihovnu, za to však zaplatil svou \textbf{neefektivitou}. To je způsobeno (mimo jiné) tím, že při každé specifikaci vertexu je jeho pozice odeslána na GPU, což představuje bottleneck v komunikaci mezi CPU a GPU. Tento mód lze stále použít v moderním OpenGL pokud využíváme tzv. \textbf{compatibility profile}.
 
-\textbf{BSP strom} je binární strom nesoucí informaci o rozdělení prostorů. Představuje \textbf{hierarchické rekurzivní} dělení N-dimenzionální prostoru na konvexní podprostory. BSP stromy uchovávají toto rozdělení tak že vlevo je \textbf{horní poloprostor} a vpravo \textbf{dolní poloprostor} (obr dole č. 3). Každý poloprostor poté obsahuje množinu objektů, které se v něm nachází.
+Moderní OpenGL tedy nutí uživatele využívat moderní praktiky, přičemž pokud se snaží využívat starých metod, OpenGL vyhodí chybu a přestane vykreslovat. Přestože je core-profile na první pohled značně \textbf{složitější}, je \textbf{efektivnější}, umožňuje \textbf{větší flexibilitu} a \textbf{lepší porozumění grafického programování}. Core-profile přináší \textbf{buffer objecty} a je založen převážně na použití \textbf{shaderů}, které jsou vždy zkompilované do malých podprogramů na CPU a \textbf{nahrány na GPU pouze jednou}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/4_Bsp}
+    \includegraphics[width=\textwidth]{assets/5_opengl_pipe}
 \end{figure}
 
-\section{Oktantové stromy}
+Od verze 4.1 přibyla ještě mezi vertex a geometry shader fáze \textbf{Tessalace}.
+
+\begin{minted}{glsl}
+// ..:: Initialization code :: ..
+// 1. bind Vertex Array Object
+glBindVertexArray(VAO);
+// 2. copy our vertices array in a vertex buffer for OpenGL to use
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+// 3. copy our index array in a element buffer for OpenGL to use
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+// 4. then set the vertex attributes pointers
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);  
+
+[...]
+
+// ..:: Drawing code (in render loop) :: ..
+glUseProgram(shaderProgram);
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0)
+glBindVertexArray(0);
+\end{minted}
+
+\subsection{GLSL (OpenGL Shading Language)}
+Je součástí OpenGL 2.0 a vyšší. Jedná se o jazyk pro programování shaderů, který je syntaxí velice podobný C. Shadery jsou malé programy, které běží na GPU. Jeho vlastnosti:
 \begin{itemize}
-    \item Jedna z metod objemového modelování.
-    \item Těleso je definováno \textbf{objemovými elementy} (\textbf{voxel}), což je v podstatě 3D pixel. Jde o \textbf{malé krychličky}, na které je rozdělen prostor a které buď jsou v tělese nebo nejsou.
-    \item Na obrázku níže je zobrazen tento způsob pro 2D. Zápis takového 2D tělesa by mohl vypadat takto: [0, 0, false], [0, 1, true], [0, 2, true], ...
-    \item Čím \textbf{jemnější detaily} potřebujeme modelovat, tím jemněji potřebujeme plochu rozdělit.
-    \item Jenže tím se nám taky \textbf{zvedají nároky na paměť}. Proto zavádíme \textbf{oktanové stromy}, které tento problém eliminují.
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.2\textwidth]{assets/4_octan}
-          \end{figure}
+    \item Definuje \textbf{speciální proměnné} \texttt{gl\_Position} (výstupní pozice z vertex shader) a \texttt{gl\_FragColor} (výstupní barva z fragment shaderu).
+    \item \textbf{Datové typy}: vektory, matice, int, float, bool, C-like structures.
+    \item Předávání hodnot mezi vertex/geometry/fragment shadery lze pomocí \textbf{vstupních} a \textbf{výstupních} \textbf{proměnných} \texttt{in, out, inout}.
+    \item Možnost vytváření vlastních \textbf{funkcí} (default funkce musí být \texttt{main()}).
 \end{itemize}
 
-\subsection{Struktura oktantových stromů}
-\begin{itemize}
-    \item Oktantové stromy \textbf{zmenšují paměťovou náročnost} detailních modelů, tak že zjemní pouze elementy, kterých se detail týká.
-    \item Začíná se tedy na velkých voxelech, ale ty nyní mohou nabývat třech stavů:
-          \begin{itemize}
-              \item voxel je obsažen v tělese
-              \item voxel není obsažen v tělese
-              \item voxel je částečně obsažen v tělese.
-          \end{itemize}
-    \item V dalším kroku se řeší ty voxely, které jsou nerozhodné, tedy částečně obsaženy v tělese. Takový voxel ležící na hranici tělesa \textbf{rozdělíme na osm menších voxelů}. (Na obrázku níže je tento postup znázorněn ve 2D prostoru, kde rozdělíme na 4 pixely).
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.6\textwidth]{assets/4_octan2}
-          \end{figure}
-    \item Výsledná struktura je pak zapsána do \textbf{oktanových stromů} (stromy s max. osmi větvemi). Dole máme oktanový (respektive kvartálový, protože jsme jen v 2D prostoru) strom popisující oblast, která je vyznačená červeně na obrázku výše.
-          \begin{figure}[H]
-              \centering
-              \includegraphics[width=0.5\textwidth]{assets/4_octan_struct}
-          \end{figure}
-\end{itemize}
+
+
+
