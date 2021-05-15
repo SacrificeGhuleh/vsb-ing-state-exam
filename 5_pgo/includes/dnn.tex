@@ -1,0 +1,44 @@
+\section{Deep learning}
+\begin{itemize}
+    \item Deep learning neboli \textbf{hluboké učení}, známé také jako hierarchické učení, je \textbf{sbírka algoritmů} používaných ve strojovém učení.
+    \item Používají se k~modelování abstrakcí na vysoké úrovni v~datech za pomocí modelových architektur, které se skládají z~několika nelineárních transformací.
+    \item Hluboké učení je součástí široké skupiny metod používané pro strojové učení, které jsou založeny na učení reprezentace dat.
+\end{itemize}
+Hluboké strukturované učení může být:
+\begin{itemize}
+    \item{\textbf{Kontrolované (s~učitelem)} - všechna data jsou kategorizovaná do tříd, algoritmy se učí předpovídat výstup ze vstupních dat.}
+    \item{\textbf{Částečně kontrolované} - data jsou částečně kategorizovaná do tříd. Pří tomto přístupu učení lze využít kombinaci kontrolovaného a~nekontrolovaného přístupu učení.}
+    \item{\textbf{Nekontrolované (bez učitele)} - data nejsou kategorizovaná do tříd, algoritmy se učí ze struktury vstupních dat.}
+\end{itemize}
+Hluboké učení je specifický přístup, použitý k~budování a~učení neuronových sítí, které jsou považovány za velmi spolehlivé rozhodovací uzly. Jestliže vstupní data algoritmu procházejí řadou nelinearit a~nelineárních transformací, tak tento algoritmus je považován za \uv{deep} algoritmus.
+
+Odstraňuje také ruční identifikaci příznaků (obrázek \ref{fig:ml_vs_ann}) z~dat a~místo toho se spoléhá na jakýkoliv trénovací proces, které má za úkol zjistit užitečné vzory ve vstupních příkladech. To dělá neuronovou síť jednodušší a~rychlejší, a~může přinést lepší výsledky než z~oblasti umělé inteligence.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.85\linewidth]{assets/9_ml_vs_ann}
+    \caption{Hlavním rozdílem mezi strojovým a~hlubokým učením je ten, že u~strojového se příznaky musí extrahovat manuálně.}
+    \label{fig:ml_vs_ann}
+\end{figure}
+
+\subsection{Konvoluční neuronové sítě \textit{CNN} - Convolution neural network}
+\begin{itemize}
+    \item Speciálním druhem vícevrstvých neuronových sítí a~jsou navrženy tak, aby rozpoznaly vizuální vzory přímo z~pixelu obrazu s~minimálním předzpracováním.
+    \item Mohou rozpoznat vzory s~extrémní variabilitou (například ručně psané znaky) a~odolnost vůči deformacím a~jednoduchým geometrickým transformacím.
+    \item Síť využívá matematickou operaci zvanou konvoluce alespoň v~jedné jejich vrstvě.
+\end{itemize}
+
+Nejznámější a~nejvíce používanou konvoluční neuronovou sítí jsou modely LeNet.
+Hlavní kroky LeNet sítě jsou:
+\begin{itemize}
+    \item{\textbf{Konvoluce} - tyto vrstvy provádějí konvoluci nad vstupy do neuronové sítě.}
+    \item{\textbf{Nelinearita (ReLU)} - tato vrstva je použita po každé konvoluční vrstvě a~jejím cílem je nahrazení všech negativních pixelů nulou ve výstupu této vrstvy (příznaková mapa).}
+    \item{\textbf{Pooling/sub sampling} - ze vstupního obrazu vyextrahuje pouze zajímavé části pomocí některých matematických operací (max, avg, sum), a~tím se \textbf{redukuje jeho dimenzionalita}.}
+    \item{\textbf{Fully connected layer/klasifikace} - tato vrstva vychází z~původních umělých neuronových sítí, konkrétně z~vícevrstvého perceptronu. Tato vrstva je typicky umístěna na konci sítě a~je propojena s~klasifikační vrstvou pro predikci.}
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\linewidth]{assets/9_cnn.pdf}
+    \caption{Řetězec LeNet konvoluční neuronové sítě}
+    \label{fig:cnn}
+\end{figure}
