@@ -1,13 +1,17 @@
-\documentclass{book}
+\documentclass[twoside]{book}
 \usepackage[czech]{babel}
+
+\usepackage[fit, breakall]{truncate}
+\usepackage{fancyhdr}
+
 % \usepackage[utf8]{inputenc}
 \usepackage[useregional]{datetime2}
 %\usepackage[T1]{fontenc}
-\usepackage[a4paper, top=2cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=1.6cm, right=1.6cm]{geometry}
 \usepackage[thinlines]{easytable}
 \usepackage{graphicx}
 \usepackage[ampersand]{easylist}
-\usepackage{changepage}
+% \usepackage{changepage}
 \usepackage{float}
 \usepackage{color}
 \usepackage{xcolor}
@@ -23,13 +27,16 @@
 \usepackage{makecell}
 \usepackage{tikz}
 \usepackage{multirow}
+\usepackage{sectsty}
 \usepackage{xevlna}
+
+\chaptertitlefont{\Large}
 
 \graphicspath{{./1_it_mpzz/}{./2_swi/}{./3_dais/}{./4_ps/}{./5_pgo/}}
 
-\renewcommand{\baselinestretch}{1.2} 
-\setitemize{itemsep=0pt}
-\setenumerate{itemsep=0pt}
+%\renewcommand{\baselinestretch}{1.2} 
+%\setitemize{itemsep=0pt}
+%\setenumerate{itemsep=0pt}
 
 \newcommand{\hhline}{\Xhline{2\arrayrulewidth}}
 \newcommand{\resline}{\vspace{1.5mm}\hrule\vspace{1.5mm}}
@@ -38,7 +45,13 @@
 \title{Otázky k SZZ\\ING 2021}
 \author{Richard Zvonek}
 
+\fancyhf{}
+\fancyhead[LE, RO]{\tiny \truncate{0.47 \textwidth} \leftmark}
+\fancyhead[RE, LO]{\tiny \truncate{0.47 \textwidth} \rightmark}
+\fancyfoot[LE,RO]{\thepage}
+
 \begin{document}
+\pagestyle{fancy}
 
 \maketitle
 \tableofcontents
@@ -115,6 +128,7 @@
 \clearpage
 
 \chapter{Asociační pravidla, hledání často se opakujících množin položek.}
+\input{1_it_mpzz/includes/8as.tex}
 
 \chapter{Metrické a topologické prostory – metriky a podobnosti.}
 \input{1_it_mpzz/includes/9.tex}

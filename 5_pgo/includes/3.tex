@@ -12,7 +12,7 @@
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{assets/6_ray_trace_svetlo}
+    \includegraphics[width=0.4\textwidth]{assets/6_ray_trace_svetlo}
 \end{figure}
 
 \section{Zpětné sledování paprsku}
@@ -23,7 +23,7 @@
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{assets/6_ray_trace_kamera}
+    \includegraphics[width=0.4\textwidth]{assets/6_ray_trace_kamera}
 \end{figure}
 
 \section{Rekurzivní sledování paprsku}
@@ -41,7 +41,7 @@
           % \item Hloubka rekurze se zpravidla nastavuje napevno.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.6\textwidth]{assets/6_rekurzivni_sledovani_paprsku}
+              \includegraphics[width=0.4\textwidth]{assets/6_rekurzivni_sledovani_paprsku}
           \end{figure}
     \item Rovnice výpočtu lokálního osvětlení: $I = I_l + k_rI_r + k_tI_t$ \\
           $I_l = I_aO_a + \sum\limits_{i} S_if_{att_i}I_i(O_d \cos{\varphi_i} + O_s \cos^n{\alpha_i} )$.
@@ -65,7 +65,7 @@ Největším problémem je hledání průsečíků paprsků s objekty scény.
     \item Rozšířením předchozího je \textbf{organizování ohraničujících ploch do hierarchických struktur}. Princip je stejný, pokud se neprotne rodičovská plocha, nehledají se dále ani průsečíky s potomky. Nevýhodou je, že nelze jednoduše takovouto strukturu automatizovaně nalézt.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.6\textwidth]{assets/6_organizovani_do_struktur}
+              \includegraphics[width=0.4\textwidth]{assets/6_organizovani_do_struktur}
           \end{figure}
     \item Další metodou je \textbf{Dělení prostoru scény na podprostory}. Obykle se dělí rovinami souřadné soustavy $xy, xz, yz \,\to\,$ vznikají tak velké kvádry (stejně velké / různě velké). Princip metody:
           \begin{itemize}
@@ -74,7 +74,7 @@ Největším problémem je hledání průsečíků paprsků s objekty scény.
           \end{itemize}
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.4\textwidth]{assets/6_deleni_podprostor}
+              \includegraphics[width=0.3\textwidth]{assets/6_deleni_podprostor}
           \end{figure}
     \item Dalším metodou je \textbf{Adaptivní hloubka rekurze}. Odhaduje se, zda je paprsek pro stanovení intenzity ve zkoumaném obrazovém bodě dostatečně užitečný. Pokud ne, tak se nevyšle (např. u odrazů či průchodů tělesy).
           % \item Protože je ray tracing výpočetně náročný, je vhodné jej urychlit.
@@ -118,7 +118,7 @@ kde:
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{assets/6_vyzarovaci_metoda}
+    \includegraphics[width=0.3\textwidth]{assets/6_vyzarovaci_metoda}
 \end{figure}
 
 \section{BRDF (Bidirectional Reflectance Distribution Function)}
@@ -134,7 +134,7 @@ kde:
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{assets/6_brdf}
+    \includegraphics[width=0.3\textwidth]{assets/6_brdf}
 \end{figure}
 \section{BTDF (Bidirectional Transmittance Distribution Function)}
 Dvousměrná distribuční fuknce lomu. Popisuje \textbf{průchod světla povrchem}.

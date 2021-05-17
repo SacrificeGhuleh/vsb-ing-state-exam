@@ -1,3 +1,4 @@
+% Systémy barev v počítačové grafice, nelinearita grafického výstupu (gamma korekce), kompozice rastrových obrazů (alfa kanál), HDR.
 \section{Systémy barev v PG}
 \begin{itemize}
     \item Základem barevného prostoru je \textbf{barevný model}, který nám dává abstraktní matematický popis, jak lze barvy vyjádřit pomocí n-tic čísel, nejčastěji trojic.
@@ -69,3 +70,35 @@
     \item Využívá se nejčastěji u videa a barevných obrázků, kde je využito faktu, že \textbf{lidské oko nejvíce vnímá jas}, který je reprezentovaný složkou Y. Barvy už tak důležité nejsou a proto se můžou například více \textbf{komprimovat} bez výraznější ztráty kvality obrazu (JPEG).
     \item Jasová složka je kódována v intervalu $\langle0, 1\rangle$ a chrominanční složky v intervalu $\langle-0.5, 0.5\rangle$
 \end{itemize}
+
+\section{Nelinearita grafického výstupu (gamma korekce)}
+První CRT monitory zobrazovaly jas nelineárně. To znamená, že dvojnásobné napětí neznamená dvojnásobný jas, křivka jasu byla zhruba exponenciální. Tento způsob zobrazení jasu přetrvává i v dnešních monitorech. Proto je potřeba upravit i zobrazované barvy. Mapování barev je potřeba provést nelineárně. Nelineární vstup v kombinaci s exponenciální křivkou jasu ve výsledku vede k k jasu, který je vnímán jako lineární. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/1_gamma_correction_gamma_curves.png}
+\end{figure}
+Problém nastává při práci s barvami. Pracovat s barvami je potřeba v lineárním prostoru, aby byly výsledky např. matematických operací korektní. Před zpracováním je tedy nutné převést barvu do lineárního prostou, po zpracování je potřeba před zobrazením opět převézt barvu zpět do nelineárního prostoru.
+
+\begin{equation}
+    C_{linear} = C_{sRGB}^{\text{gamma}}
+\end{equation}
+
+\begin{equation}
+    C_{sRGB} = C_{linear}^{\frac{1}{\text{gamma}}}
+\end{equation}
+
+\section{Kompozice rastrových obrazů (alfa kanál)}
+Alfa kanál v obrazech se používá v počítačové grafice pro průhlednost obrazů. Obrazy mohou obsahovat plnou nebo částečnou průhlednost. Plně transparentní obraz propouští veškeré barvy podkladu, částečně transparentní obraz mixuje část bravy podkladu a část vlastní barvy. Např. výsledná barva obrazu s hodnotou alfa 0.5 vytvoří mix barev tvořený z $50\%$ barvou podkladu a z $50\%$ barvou transparentního objektu. V případě překryvu více transparentních objektů je potřeba objekty setřídit dle vzdálenosti a vypočítat transparentnost postupně.   
+
+\section{HDR}
+Barvy jsou tradičně reprezentovány trojicí 8bitových hodnot v intervalu  $\langle-0, 255\rangle$. Takto popsaný obraz ale může ztrácet detaily z důvodu limitovaných možností hodnot pro rozložení barev. Přesnější metodou je ukládání jednotlivých složek jako 16 nebo 32bitových hodnot, pomocí desetiných čísel. Zde ale nastává problém s hodnotami většími než 1. Je teda nutné provést tzv. tone mapping. Proces tone mapping v zásadě převádí hodnoty do intervalu $\langle0, 1\rangle$. \par
+Jednou z nejjednodušších metod je Reinhardova metoda, hodnota se vypočítá následujícím vzorcem: 
+\begin{equation}
+    C_{out} = \frac{C_{in}}{C_{in} + 1}    
+\end{equation}
+Tato metoda zachová poměrně dobře kontrast pro oblasti obrazu s nízkým jasem, oblasti obrazu s vysokým jasem jsou ale méně kontrastní. 
+Pokročilejší metodou je mapování hodnot pomocí expozice, následujícím vzorcem:
+\begin{equation}
+    C_{out} = 1 - e^{C_{in} * \exp}
+\end{equation}
+Pomocí hodnoty expozice je pak možné nastavit celkové podání barev obrazu. Hodnota expozice by měla být zvolena v závislosti na aktuálním vstupu, je možné hodnotu expozice volit automaticky. 

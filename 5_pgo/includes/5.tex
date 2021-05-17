@@ -3,7 +3,7 @@ JPEG představuje jeden z nejpoužívanějších obrazových formátů (fotograf
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{assets/7_jpeg}
+    \includegraphics[width=0.2\textwidth]{assets/7_jpeg}
 \end{figure}
 
 \subsection{Komprese JPEG}
@@ -12,9 +12,9 @@ JPEG představuje jeden z nejpoužívanějších obrazových formátů (fotograf
     \item \textbf{Provedení DCT} -- obraz se následně rozdělí na bloky o velikosti $8 \times 8$. Pro každý blok se provede 2D DCT (diskrétní kosinova transformace), ta narozdíl od DFT produkuje pouze reálné komponenty. Výsledek DCT nám vrátí počet jednotlivých frekvencí, které se v obraze nachází, přičemž \textbf{nízké frekvence} se koncentrují vlevo nahoře a \textbf{vysoké frekvence} vpravo dole (viz obrázek).
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.8\textwidth]{assets/7_dct1}
-              \includegraphics[width=0.3\textwidth]{assets/7_dct2}
-              \includegraphics[width=0.35\textwidth]{assets/7_jpeg_zigzag}
+              \includegraphics[width=0.6\textwidth]{assets/7_dct1}
+              \includegraphics[width=0.2\textwidth]{assets/7_dct2}
+              \includegraphics[width=0.25\textwidth]{assets/7_jpeg_zigzag}
           \end{figure}
     \item \textbf{Kvantizace} -- jednotlivé bloky jsou \textbf{vyděleny kvantizační maticí a zaokrouhleny}. Koeficienty matice definují \textbf{míru komprese} (čím větší hodnoty tím větší komprese a horší obraz). Většinou po aplikaci kvantizace v každém bloku zůstane pouze několik hodnot \textbf{vlevo nahoře} to vyplývá z toho co jsme zmínil výše $\rightarrow$ více se redukují vysoké frekvence, které si můžeme dovolit vynechat. Výsledek před a po kvantizaci je vidět obrázku níže.
           \begin{figure}[H]
@@ -30,7 +30,7 @@ JPEG představuje jeden z nejpoužívanějších obrazových formátů (fotograf
           Intermediální sekvence se poté zakóduje \textbf{Huffmanovým kódem}, kde se kódují pouze kombinace (RUNLENGTH, SIZE) u AC a (SIZE) u DC podle předem daných tabulek. AMPLITUDE se zapisuje pomocí \textbf{jednotkového doplňku} (způsob reprezentace záporných čísel).
           \begin{figure}[H]
               \centering
-              \includegraphics[width=\textwidth]{assets/7_intermediate}
+              \includegraphics[width=0.8\textwidth]{assets/7_intermediate}
           \end{figure}
 \end{enumerate}
 
@@ -39,7 +39,7 @@ MPEG je zkratkou pro Moving Picture Expert Group. Cílem práce této skupiny by
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{assets/7_mpeg}
+    \includegraphics[width=0.3\textwidth]{assets/7_mpeg}
 \end{figure}
 
 \begin{itemize}
@@ -58,8 +58,8 @@ Standard MPEG, rozlišuje \textbf{tři typy rámců (I, B, P)},  ve své podstat
     \item \textbf{B (Interpolated bi-directionally)} -- tyto rámce jsou kódovány vzhledem k nejbližšímu \textbf{předchozímu} a \textbf{nejbližšímu} budoucímu rámci typu \textbf{I} nebo \textbf{P}. Jejich použití je nepovinné ale z hlediska dosahovaných kompresních poměrů výhodné. \textbf{Komplikace} z použití rámců B spočívá v uchovávání v paměti dva kotevní obrazy. Dále je nevyhnutelné jisté časové zpoždění, protože nejprve musí být k dispozici obraz \textbf{novější} a teprve potom může být kódován obraz starší.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.48\textwidth]{assets/7_mpeg_komprese}
-              \includegraphics[width=0.35\textwidth]{assets/7_mpeg_zigzag}
+              \includegraphics[width=0.3\textwidth]{assets/7_mpeg_komprese}
+              \includegraphics[width=0.3\textwidth]{assets/7_mpeg_zigzag}
           \end{figure}
 \end{itemize}
 
@@ -87,8 +87,8 @@ Stanovení pohybového vektoru MPEG norma nepředepisuje, jedná se však o jede
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.48\textwidth]{assets/7_mpeg_rekurze}
-    \includegraphics[width=0.48\textwidth]{assets/7_mpeg_log}
+    \includegraphics[width=0.3\textwidth]{assets/7_mpeg_rekurze}
+    \includegraphics[width=0.3\textwidth]{assets/7_mpeg_log}
 \end{figure}
 
 Kódování složek vektorů se provádí \textbf{inkrementálně vzhledem k předchozí hodnotě}. Zároveň může nastat situace kdy se vektor nepodaří nalézt, v tom případě je možné kódovat dané makrobloky nezávisle na ostatních (stejně jako I).
@@ -103,7 +103,7 @@ Kódování složek vektorů se provádí \textbf{inkrementálně vzhledem k př
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/7_signaly}
+    \includegraphics[width=0.5\textwidth]{assets/7_signaly}
 \end{figure}
 
 \section{Operace nad prostorem signálů}
@@ -153,7 +153,7 @@ kde $k = 0, \ldots M - 1$, $l = 0, \ldots N - 1$. Symbol $F(k, l)$ značí frekv
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{assets/7_amp_ftt}
+    \includegraphics[width=0.4\textwidth]{assets/7_amp_ftt}
 \end{figure}
 
 Tato frekvenční charakteristika obsahuje \textbf{koeficienty odpovídající různým frekvenčním složkám}. Analýzou a operacemi s koeficienty ve frekvenční oblasti lze \textbf{modifikovat obraz v prostorové oblasti} např. realizovat filtr typu \textbf{dolní propust pro vyhlazení obrazu}. Pro získání modifikovaného obrazu je třeba převést koeficienty zpět do prostorové oblasti. Tomuto procesu se říká zpětná nebo někdy \textbf{inverzní Fouriérova transformace} IFT, jejíž diskrétní varianta IDFT je dána následujícím definičním vztahem:

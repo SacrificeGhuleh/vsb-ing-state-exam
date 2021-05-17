@@ -3,7 +3,7 @@
 Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{assets/5_retezec}
+    \includegraphics[width=0.6\textwidth]{assets/5_retezec}
 \end{figure}
 
 \begin{enumerate}
@@ -21,7 +21,7 @@ Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL
               \item V tomto kroku je počítán barevný vjem každého vrcholu.
                     \begin{figure}[H]
                         \centering
-                        \includegraphics[width=0.4\textwidth]{assets/5_vypocet_barevneho_vjemu}
+                        \includegraphics[width=0.3\textwidth]{assets/5_vypocet_barevneho_vjemu}
                     \end{figure}
           \end{itemize}
     \item \textbf{Aplikace zobrazovací transformace na vrcholy}
@@ -33,7 +33,7 @@ Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL
                     \end{itemize}
                     \begin{figure}[H]
                         \centering
-                        \includegraphics[width=0.5\textwidth]{assets/5_stred_promitani}
+                        \includegraphics[width=0.3\textwidth]{assets/5_stred_promitani}
                     \end{figure}
           \end{itemize}
     \item \textbf{Ořezání zorným objemem}
@@ -42,7 +42,7 @@ Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL
           \end{itemize}
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.5\textwidth]{assets/5_orezani_zornym_pole}
+              \includegraphics[width=0.3\textwidth]{assets/5_orezani_zornym_pole}
           \end{figure}
           %\begin{enumerate}
     \item \textbf{Rasterizace plošek}
@@ -52,7 +52,7 @@ Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL
               \item Barva každého pixelu se stanoví \textbf{interpolací mezi hodnotami ve vrcholech}.
                     \begin{figure}[H]
                         \centering
-                        \includegraphics[width=0.5\textwidth]{assets/5_rasterizace_plosek}
+                        \includegraphics[width=0.3\textwidth]{assets/5_rasterizace_plosek}
                     \end{figure}
           \end{itemize}
     \item[5.1] \textbf{Řešení viditelnosti (z--buffer)}
@@ -61,7 +61,7 @@ Klade \textbf{důraz na rychlost }nikoli na kvalitu, realizuje ho \textbf{OpenGL
               \item Před řešením viditelnosti bývá středové promítání převedeno na rovnoběžné.
                     \begin{figure}[H]
                         \centering
-                        \includegraphics[width=0.5\textwidth]{assets/5_pip_zbuffer}
+                        \includegraphics[width=0.3\textwidth]{assets/5_pip_zbuffer}
                     \end{figure}
           \end{itemize}
     \item[5.2] \textbf{Nanášení textury}
@@ -85,7 +85,7 @@ Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálnýc
 \textbf{Normálový vektor} pro každý vrchol vypočteme jako aritmetický průměr normálových vektorů plošek, které se v tomto vrcholu stýkají.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{assets/5_gouraud}
+    \includegraphics[width=0.3\textwidth]{assets/5_gouraud}
 \end{figure}
 
 \begin{enumerate}
@@ -96,7 +96,7 @@ Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálnýc
 \end{enumerate}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{assets/5_gouradovo}
+    \includegraphics[width=0.3\textwidth]{assets/5_gouradovo}
 \end{figure}
 \subsection*{Výhody}
 \begin{itemize}
@@ -123,7 +123,7 @@ Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálnýc
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{assets/5_phong_stin}
+    \includegraphics[width=0.3\textwidth]{assets/5_phong_stin}
 \end{figure}
 \section{Řešení viditelnosti}
 \begin{itemize}
@@ -161,7 +161,7 @@ Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálnýc
     \item \textbf{Plovoucí horizont} (Floating Horizon Algorithm) -- metoda \uv{zig--zag}, počítáme od \uv{nejbližšího} rohu plochy k \uv{oku} pozorovatele.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.5\textwidth]{assets/5_horizont}
+              \includegraphics[width=0.3\textwidth]{assets/5_horizont}
           \end{figure}
     \item \textbf{Paměť hloubky} (\textbf{Z--buffer}, depth--buffer)
           \begin{enumerate}
@@ -172,7 +172,7 @@ Přesto ani tento způsob stínování neposkytuje zcela věrný obraz reálnýc
           \end{enumerate}
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.7\textwidth]{assets/5_zbuffer}
+              \includegraphics[width=0.5\textwidth]{assets/5_zbuffer}
           \end{figure}
           \begin{itemize}
               \item \textbf{Nejznámější} a \textbf{nejefektivnější} metoda.

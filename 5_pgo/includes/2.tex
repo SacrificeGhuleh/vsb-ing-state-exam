@@ -156,53 +156,6 @@ kde \textbf{y} je bod, do kterého je transformován bod \textbf{x} pomocí mati
           \end{equation*}
 \end{itemize}
 
-\subsection*{Skládání transformací (Příklad)}
-Transformujte bod $A[3,4]$ posunem o vektor $(-5,1)$ a rotací o úhel $\ang{90}$ stupňů:
-\begin{equation*}
-    \textrm{posun:}
-    \begin{bmatrix}
-        x' \\[0.3em]
-        y'
-    \end{bmatrix} =
-    \begin{bmatrix}
-        1 & 0 \\[0.3em]
-        0 & 1
-    \end{bmatrix}
-    \begin{bmatrix}
-        x \\[0.3em]
-        y
-    \end{bmatrix} +
-    \begin{bmatrix}
-        -5 \\[0.3em]
-        1
-    \end{bmatrix} \qquad \textrm{rotace:}
-    \begin{bmatrix}
-        x' \\[0.3em]
-        y'
-    \end{bmatrix} =
-    \begin{bmatrix}
-        0 & -1 \\[0.3em]
-        1 & 0
-    \end{bmatrix}
-    \begin{bmatrix}
-        x \\[0.3em]
-        y
-    \end{bmatrix} +
-    \begin{bmatrix}
-        0 \\[0.3em]
-        0
-    \end{bmatrix}
-\end{equation*}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{assets/2_skladani}
-    \includegraphics[width=0.7\textwidth]{assets/2_skladani2}
-\end{figure}
-\noindent Obecné \textbf{skládání transformací} v kartézské souřadné soustavě:
-\begin{center}
-    $[X'] = A_n ...(A_2(A_1 \cdot X + b_1) + b_2) ... + b_n$.
-\end{center}
-
 \section{Projektivní prostor}
 Při použití afinních prostorů v PG lze v některých situacích narazit na jisté problémy, zejména to, že nelze zobrazovat body v nekonečnu (tzv. nevlastní body). I když jsou praktické scény konečné, mohou i zde vzniknout \textbf{nevlastní body} (středové promítání).
 
@@ -217,7 +170,7 @@ Problém spočívá v tom, že vektor reprezentovaný nevlastními body má jedn
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{assets/2_homoprostor}
+    \includegraphics[width=0.4\textwidth]{assets/2_homoprostor}
 \end{figure}
 
 \section{Projektivní transformace - kolineace}
@@ -301,7 +254,7 @@ U projektivních transformací se můžeme setkat s těmito základními transfo
 \subsection{Klasifikace promítacích metod}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{assets/2_klas_promitani}
+    \includegraphics[width=0.4\textwidth]{assets/2_klas_promitani}
 \end{figure}
 
 \subsection{Rovnoběžné promítání}
@@ -329,7 +282,7 @@ Jednička na pozici $3,3$ v matici zajišťuje, že se transformací nezmění s
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{assets/2_mongeova}
+    \includegraphics[width=0.4\textwidth]{assets/2_mongeova}
 \end{figure}
 
 Souřadnice bodů: $M(x, y, z)$... 1. průmět $M1 (x, y, 0)$ 2. průmět $M2 (x, 0, z)$. V Mongeově projekci je\textbf{ těleso určeno svým nárysem a půdorysem}.
