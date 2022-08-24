@@ -26,23 +26,23 @@ V C++ neexistuje blok \textbf{finally}. Díky technice RAII blok finally není p
 
 \begin{minted}{java}
 class MojeVyjimka extends Exception { 
-	MojeVyjimka(String msg) { super(msg); } 
+  MojeVyjimka(String msg) { super(msg); } 
 }
 class Vyjimky {
-	static void zpracuj(int x) throws MojeVyjimka { 
-		System.out.println("Volani zpracuj " + x); 
-		if( x < 0 ) { throw new MojeVyjimka("Parametr nesmi byt zaporny"); }
-	} 
-	
-	public static void main(String args[]) { 
-		try { 
-			zpracuj(1); 
-			zpracuj(-1); 
-		} catch( MojeVyjimka e ) {  
-			e.printStackTrace();  
-		} finally {
-		}
-	} 
+  static void zpracuj(int x) throws MojeVyjimka { 
+    System.out.println("Volani zpracuj " + x); 
+    if( x < 0 ) { throw new MojeVyjimka("Parametr nesmi byt zaporny"); }
+  } 
+  
+  public static void main(String args[]) { 
+    try { 
+      zpracuj(1); 
+      zpracuj(-1); 
+    } catch( MojeVyjimka e ) {  
+      e.printStackTrace();  
+    } finally {
+    }
+  } 
 }
 \end{minted}
 
@@ -51,15 +51,15 @@ Assert (od verze 1.4) přináší snadný způsob jak vkládat do programu \text
 
 \begin{minted}[tabsize=4,obeytabs]{java}
 class TestAssert { 
-	static double prevracena_hodnota(double x) { 
-		assert x != 0.0 : "Argument nesmi byt nulovy"; 
-		return 1.0 / x; 
-	}    
-	
-	public static void main(String args[]) { 
-		System.out.println(prevracena_hodnota(1)); 
-		System.out.println(prevracena_hodnota(0)); 
-	} 
+  static double prevracena_hodnota(double x) { 
+    assert x != 0.0 : "Argument nesmi byt nulovy"; 
+    return 1.0 / x; 
+  }    
+  
+  public static void main(String args[]) { 
+    System.out.println(prevracena_hodnota(1)); 
+    System.out.println(prevracena_hodnota(0)); 
+  } 
 }
 \end{minted}
 
@@ -73,8 +73,8 @@ Proudy jsou základní cestou jak pracovat s daty, \textbf{náhodným} i \textb
 \section{Streamy v .NET}
 \begin{itemize}
     \item \textbf{Textové}: \texttt{StreamWritter}, \texttt{SreamReader}
-    \item \textbf{Binární}:	 \texttt{BinaryWriter},	 \texttt{BinaryReader}
-    \item \textbf{Další}:	 \texttt{MemoryStream},	 \texttt{GZipStream},		 \texttt{Bufferedstream}
+    \item \textbf{Binární}:   \texttt{BinaryWriter},   \texttt{BinaryReader}
+    \item \textbf{Další}:   \texttt{MemoryStream},   \texttt{GZipStream},     \texttt{Bufferedstream}
 \end{itemize}
 
 \section{Streamy v Javě}

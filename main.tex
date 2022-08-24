@@ -1,4 +1,4 @@
-\documentclass[twoside]{book}
+\documentclass[openany]{book}
 \usepackage[czech]{babel}
 
 \usepackage[fit, breakall]{truncate}
@@ -7,7 +7,7 @@
 % \usepackage[utf8]{inputenc}
 \usepackage[useregional]{datetime2}
 %\usepackage[T1]{fontenc}
-\usepackage[a4paper, top=2cm, bottom=2cm, left=1.6cm, right=1.6cm]{geometry}
+\usepackage[a4paper, top=1.6cm, bottom=1.6cm, left=2cm, right=2cm]{geometry}
 \usepackage[thinlines]{easytable}
 \usepackage{graphicx}
 \usepackage[ampersand]{easylist}
@@ -30,6 +30,8 @@
 \usepackage{sectsty}
 \usepackage{xevlna}
 
+\raggedbottom
+
 \chaptertitlefont{\Large}
 
 \graphicspath{{./1_it_mpzz/}{./2_swi/}{./3_dais/}{./4_ps/}{./5_pgo/}}
@@ -45,206 +47,221 @@
 \title{Otázky k SZZ\\ING 2021}
 \author{Richard Zvonek}
 
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyhead[LE, RO]{\tiny \truncate{0.9 \textwidth} \leftmark}
+%\fancyhead[RE, LO]{\tiny \truncate{0.47 \textwidth} \rightmark}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0pt}%
+\renewcommand{\footrulewidth}{0.4pt}}
+
+
+\pagestyle{fancy}
 \fancyhf{}
 \fancyhead[LE, RO]{\tiny \truncate{0.47 \textwidth} \leftmark}
 \fancyhead[RE, LO]{\tiny \truncate{0.47 \textwidth} \rightmark}
 \fancyfoot[LE,RO]{\thepage}
 
-\begin{document}
-\pagestyle{fancy}
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+  {\noindent\raggedright\normalfont% Alignment and font reset
+   \Large\bfseries\thechapter~~#1\par\nobreak}% Formatting
+  \vspace{\baselineskip}% ...just a little space
+}
 
-\maketitle
+
+\begin{document}
 \tableofcontents
 
 \part{Počítačová grafika a analýza obrazu}
 \chapter{Systémy barev v počítačové grafice, nelinearita grafického výstupu (gamma korekce), kompozice rastrových obrazů (alfa kanál), HDR.}
 \input{5_pgo/includes/1.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Afinní a projektivní prostor. Afinní a projektivní transformace a jejich matematický zápis. Modelovací a zobrazovací transformace v počítačové grafice.}
 \input{5_pgo/includes/2.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Metody získávání fotorealistických obrazů, rekurzivní sledování paprsku, radiometrie, zobrazovací rovnice, Monte Carlo přístupy ve výpočtu osvětlení, urychlovací metody.}
 \input{5_pgo/includes/3.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Standardní zobrazovací řetězec a realizace jeho jednotlivých kroků, modely osvětlení a stínovací algoritmy, řešení viditelnosti, možnosti výpočtu globálního osvětlení v reálném čase, stručná charakteristika standardu OpenGL.}
 \input{5_pgo/includes/4.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Komprese obrazu a videa, principy úprav obrazu v prostorové a frekvenční doméně.}
 \input{5_pgo/includes/5.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Základní metody úpravy a segmentace obrazu (filtrace, prahování, hrany, oblasti, rohy).}
 \input{5_pgo/includes/6.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Základní metody rozpoznávání objektů, příznakové rozpoznávání. Univerzální příznaky pro rozpoznávání (např. HOG), trénovací klasifikátory (např. SVM).}
 \input{5_pgo/includes/7.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Hluboké neuronové sítě (např. konvoluční, popis jednotlivých vrstev).}
 \input{5_pgo/includes/8.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Rekonstrukce 3D objektů z 2D obrazů (základní principy).}
-%\input{5_pgo/includes/9.tex}
-\clearpage
+\input{5_pgo/includes/9.tex}
+% \pagebreak
 
 \part{Matematické základy informatiky}
 
 \chapter{Konečné automaty, regulární výrazy, uzávěrové vlastnosti třídy regulárních jazyků.}
 \input{1_it_mpzz/includes/1.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Bezkontextové gramatiky a jazyky. Zásobníkové automaty, jejich vztah k bezkontextovým gramatikám.}
 \input{1_it_mpzz/includes/2.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Matematické modely algoritmů -Turingovy stroje a stroje RAM. Složitost algoritmu, asymptotické odhady. Algoritmicky nerozhodnutelné problémy.}
 \input{1_it_mpzz/includes/3.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Třídy složitosti problémů. Třída PTIME a NPTIME, NP-úplné problémy.}
 \input{1_it_mpzz/includes/4.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Jazyk predikátové logiky prvního řádu. Práce s kvantifikátory a ekvivalentní transformace formulí.}
 \input{1_it_mpzz/includes/5.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Pojem relace, operace s relacemi, vlastnosti relací. Typy binárních relací. Relace ekvivalence a relace uspořádání.}
 \input{1_it_mpzz/includes/6.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Pojem operace a obecný pojem algebra. Algebry s jednou a dvěma binárními operacemi.}
 \input{1_it_mpzz/includes/7.tex}
-\clearpage
+% \pagebreak
 
 \chapter{FCA – formální kontext, formální koncept, konceptuální svazy.}
 \input{1_it_mpzz/includes/8.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Asociační pravidla, hledání často se opakujících množin položek.}
 \input{1_it_mpzz/includes/8as.tex}
 
 \chapter{Metrické a topologické prostory – metriky a podobnosti.}
 \input{1_it_mpzz/includes/9.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Shlukování.}
 \input{1_it_mpzz/includes/10.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Náhodná veličina. Základní typy náhodných veličin. Funkce určující rozdělení náhodných veličin.}
 \input{1_it_mpzz/includes/11.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Vybraná rozdělení diskrétní a spojité náhodné veličiny - binomické, hypergeometrické, negativně binomické, Poissonovo, exponenciální, Weibullovo, normální rozdělení.}
 \input{1_it_mpzz/includes/12.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Popisná statistika. Číselné charakteristiky a vizualizace kategoriálních a kvantitativních proměnných.}
 \input{1_it_mpzz/includes/13.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Metody statistické indukce. Intervalové odhady. Princip testování hypotéz.}
 \input{1_it_mpzz/includes/14.tex}
-\clearpage
+% \pagebreak
 
 \part{Softwarové inženýrství}
 
 \chapter{Softwarový proces. Jeho definice, modely a úrovně vyspělosti.}
 \input{2_swi/includes/1.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Vymezení fáze „sběr a analýza požadavků“. Diagramy UML využité v dané fázi.}
 \input{2_swi/includes/2.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Vymezení fáze „Návrh“. Diagramy UML využité v dané fázi. Návrhové vzory – členění, popis a příklady. }
 \input{2_swi/includes/3.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Objektově orientované paradigma. Pojmy třída, objekt, rozhraní. Základní vlastnosti objektu a vztah ke třídě. Základní vztahy mezi třídami a rozhraními. Třídní vs. instanční vlastnosti.}
 \input{2_swi/includes/4.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Mapování UML diagramů na zdrojový kód.}
 \input{2_swi/includes/5.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Správa paměti(v jazycích C/C++, Java , C\#, Python), virtuální stroj, podpora paralelního zpracování a vlákna.}
 \input{2_swi/includes/6.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Zpracování chyb v moderních programovacích jazycích, princip datových proudů – pro vstup a výstup. Rozdíl mezi znakově a bytově orientovanými datovými proudy.}
 \input{2_swi/includes/7.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Jazyk UML – typy diagramů a jejich využití v rámci vývoje.}
 \input{2_swi/includes/8.tex}
-\clearpage
+% \pagebreak
 
 \part{Databázové a informační systémy}
 
 \chapter{Modelování databázových systémů, konceptuální modelování, datová analýza, funkční analýza; nástroje a modely. }
 \input{3_dais/includes/1.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Relační datový model, SQL; funkční závislosti, dekompozice a normální formy.}
 \input{3_dais/includes/2.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Transakce, zotavení, log, ACID, operace COMMIT a ROLLBACK; problémy souběhu, řízení souběhu: zamykání, úroveň izolacev SQL.}
 \input{3_dais/includes/3.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Procedurální rozšíření SQL, PL/SQL, T-SQL, triggery, funkce, procedury, kurzory, hromadné operace.}
 \input{3_dais/includes/4.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Základní fyzická implementace databázových systémů: tabulky a indexy; plán vykonávání dotazů.}
 \input{3_dais/includes/5.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Objektově‐relační datový model a XML datový model: principy, dotazovací jazyky.}
 \input{3_dais/includes/6.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Datová vrstva informačního systému; existující API, rámce a implementace, bezpečnost; objektově-relační mapování.}
 \input{3_dais/includes/7.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Distribuované SŘBD, fragmentace a replikace.}
 \input{3_dais/includes/8.tex}
-\clearpage
+% \pagebreak
 
 \part{Počítače a sítě}
 \chapter{Architektura univerzálních procesorů. Principy urychlování činnosti procesorů. }
 \input{4_ps/includes/1.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Základní vlastnosti monolitických počítačů a jejich typické integrované periférie. Možnosti použití. }
 \input{4_ps/includes/2.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Protokolová rodina TCP/IP. }
 \input{4_ps/includes/4.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Metody sdíleného přístupu ke společnému kanálu. }
 \input{4_ps/includes/5.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Problémy směrování v počítačových sítích. Adresování v IP, překlad adres (NAT). }
 \input{4_ps/includes/6.tex}
-\clearpage
+% \pagebreak
 
 \chapter{Bezpečnost počítačových sítí s TCP/IP: útoky, paketové filtry, stavový firewall. Šifrování a autentizace, virtuální privátní sítě.  }
 \input{4_ps/includes/7.tex}
-\clearpage
+% \pagebreak
 
 \end{document}

@@ -129,8 +129,8 @@ DFD diagramy lze zakreslit v různých úrovních. Např. proces Evidence akcí 
 IF všechny výrobky v objednávce jsou rezervovány,
 THEN pošli objednávku k dalšímu zpracování oddělení prodeje.
 OTHERWISE,
-	FOR EVERY nezarezervovaný výrobek v objednávce DO:
-		Zkus najít volný výrobek a rezervuj ho.
-		IF výrobek není na skladě,
-		THEN informuj správce.
+  FOR EVERY nezarezervovaný výrobek v objednávce DO:
+    Zkus najít volný výrobek a rezervuj ho.
+    IF výrobek není na skladě,
+    THEN informuj správce.
 \end{minted}

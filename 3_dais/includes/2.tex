@@ -54,7 +54,7 @@ Obecně se vazby v relačním modelu realizují pomocí další relace (tabulky)
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/mn.png}
+    \includegraphics[width=0.5\textwidth]{assets/mn.png}
 \end{figure}
 
 \section{SQL (Structured Query Language)}
@@ -214,12 +214,12 @@ Normální formy relací (NF) prozrazují jak dobře je databáze navržena (č�
     \item \textbf{2 NF} -- je v 1NF + \textbf{každý sekundární atribut je úplně závislý na každém klíči schématu}. Neboli neexistuje závislost sekundárních na podklíči (pokud se klíč skládá z více atributů). Např.: když AB → CD, pak nesmí být B → C. Atribut adresa není závislý na všech klíčích FZ, ale pouze na F.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.4\textwidth]{assets/2nf.png}
+              \includegraphics[width=0.3\textwidth]{assets/2nf.png}
           \end{figure}
     \item \textbf{3 NF} -- je 2NF + žádný sekundární atribut \textbf{není tranzitivně závislý} na žádném klíči schématu. Nesmí existovat závislosti mezi sekundárními atributy (Model auta -> značka auta). Když AB → CD, pak nesmí C  → D. \textbf{Příklad porušení 3NF} -- atribut počet obyvatel je tranzitivně závislý (přes atr. město) na klíči.
           \begin{figure}[H]
               \centering
-              \includegraphics[width=0.4\textwidth]{assets/3nf.png}
+              \includegraphics[width=0.3\textwidth]{assets/3nf.png}
           \end{figure}
     \item \textbf{BCNF} (Boyce-Coddova normální forma) -- 3NF + je-li funkční závislost (X → Y) $\in$ F+ a Y $\notin$ X, pak X obsahuje klíč schématu. \textbf{Musí být závislost sekundárních atributů na primárních nikoli naopak}. Když AB → CD, pak nesmí C  → A.
 

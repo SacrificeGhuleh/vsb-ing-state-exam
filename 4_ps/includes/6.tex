@@ -106,7 +106,7 @@ Občas se používá speciální zápis, který se označuje jako \textbf{invers
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{assets/ipv4-header}
+    \includegraphics[width=0.4\textwidth]{assets/ipv4-header}
     \caption{Hlavička IPv4}
 \end{figure}
 
@@ -118,7 +118,7 @@ Veřejné IP adresy (public address) tvoří hlavní část adresního rozsahu i
 Oproti tomu privátní IP adresy (private adress) by se měly používat pouze v rámci LAN sítí a v internetu by přes ISP neměli komunikovat. Firma pak používá jednu (nebo více) veřejnou adresu a pomocí techniky NAT (Network Address Translation) se při komunikaci mimo LAN překládají privátní adresy na tuto veřejnou. Stejné privátní adresy se tak mohou nacházet na mnoha místech v internetu, ale nemohou spolu přímo komunikovat. Následující tabulka ukazuje jednotlivé privátní rozsahy.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{assets/6_ip4}
+    \includegraphics[width=.6\textwidth]{assets/6_ip4}
 \end{figure}
 
 IP adresy se dělí na:
@@ -148,7 +148,7 @@ Paket IPv6 se skládá ze dvou hlavních částí: hlavičky a těla.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{assets/4_ipv6}
+    \includegraphics[width=.6\textwidth]{assets/4_ipv6}
 \end{figure}
 
 
@@ -176,17 +176,17 @@ Typicky se využívá kombinace obou níže zmíněných řešení.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{assets/6_nat_out}
+    \includegraphics[width=.6\textwidth]{assets/6_nat_out}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{assets/6_nat_in}
+    \includegraphics[width=.6\textwidth]{assets/6_nat_in}
 \end{figure}
 
 \subsection{PAT (Port Address Translation)}
 V případě PAT dochází k překladu jak adres tak i příslušných portů v IP komunikaci. Výhodou zde je, že za jednu venkovní IP adresu můžeme maskovat celou řadu služeb, které jsou hostovány na různých serverech. Typickým příkladem jsou FTP a www servery umístěné v DMZ.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{assets/6_pat_mask}
+    \includegraphics[width=.6\textwidth]{assets/6_pat_mask}
 \end{figure}

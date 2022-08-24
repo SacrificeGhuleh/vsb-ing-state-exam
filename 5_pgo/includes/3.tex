@@ -83,11 +83,11 @@ Největším problémem je hledání průsečíků paprsků s objekty scény.
           % \item S jejich pomocí můžeme zjistit, zda se paprsek pohybuje v okolí objektu (tj. protíná strukturu).
           % \item Pouze v případě, že ano, zjišťujeme jeho průsečíky s objektem.
           % \item Vhodná obalová struktura má následující vlastnosti:
-          % 	\begin{itemize}
-          %		\item Objekt v ní vždy leží celý, ale struktura se jej snaží co nejvíce obepnout.
-          %		\item Co nejjednodušší výpočet pro ověření průsečíků s paprskem.
-          %		\item Dostatečně jednoduchá konstrukce.
-          %	\end{itemize}
+          %   \begin{itemize}
+          %    \item Objekt v ní vždy leží celý, ale struktura se jej snaží co nejvíce obepnout.
+          %    \item Co nejjednodušší výpočet pro ověření průsečíků s paprskem.
+          %    \item Dostatečně jednoduchá konstrukce.
+          %  \end{itemize}
 \end{enumerate}
 \section{Vyzařovací metoda - radiozita}
 Na rozdíl od předchozí metody rekurzivního sledování paprsku (dobře zobrazuje lesklé, dobře osvícený předměty) je tato metoda spíše protikladná. Zaměřuje se na \textbf{difúzní odrazy světla} -- vhodná pro matné povrchy a rozptýlené světlo (např. interiéry). Princip:
@@ -97,11 +97,11 @@ Na rozdíl od předchozí metody rekurzivního sledování paprsku (dobře zobra
     \item Pro každou plošku jsou spočítany hodnoty RGB -- vyzařování je konstantní na celém povrchu plošky.
           \begin{itemize}
               \item \textbf{PROBLÉM:} kdyby se takto plošky zobrazovaly, mohly by se sousedící plošky výrazně lišit intenzitou a nebylo by to pěkné.
-              \item 	\textbf{ŘEŠENÍ:} po výpočtu intenzit plošek se intenzity přenesou do jednotlivých uzlů sítě (zprůměrování intezit okolních plošek, které obklopují uzel) a následně se intenzity interpolují. (proto i to hustší dělení, kde je přechod světlo--stín ...).
+              \item   \textbf{ŘEŠENÍ:} po výpočtu intenzit plošek se intenzity přenesou do jednotlivých uzlů sítě (zprůměrování intezit okolních plošek, které obklopují uzel) a následně se intenzity interpolují. (proto i to hustší dělení, kde je přechod světlo--stín ...).
           \end{itemize}
     \item Nejjednodušším, ale ne zrovna nejsprávnějším zobrazením scény a interpolací je pomocí \textbf{Gouradova stínování}.
           \begin{itemize}
-              \item 	\textbf{PROBLÉM:} osvětlení bylo spočítáno v prostoru scény a tam by se měla provádět i interpolace, ale Gouraudovo stínování interpoluje v prostoru obrazu. Problém je, že při středové projekci se nezachovává dělící poměr a proto budou výsledky v prostoru obrazu rozdílné od výsledků z prostoru scény. Nicméně Gouraudovo stínování se používá, protože je rychlé.
+              \item   \textbf{PROBLÉM:} osvětlení bylo spočítáno v prostoru scény a tam by se měla provádět i interpolace, ale Gouraudovo stínování interpoluje v prostoru obrazu. Problém je, že při středové projekci se nezachovává dělící poměr a proto budou výsledky v prostoru obrazu rozdílné od výsledků z prostoru scény. Nicméně Gouraudovo stínování se používá, protože je rychlé.
           \end{itemize}
     \item Vytváření sítě probíhá v několika iteracích: nejdřív se hustota odhadne, pak se spočítá osvětlení a dle výsledků se síť dohustí tam, kde je třeba. Základní myšlenou je, že na všech ploškách ustanov \textbf{energetická rovnováha}: \textbf{ výkon vyzařovaný + výkon absorvovaný = výkon na plošku dopadající od jiných ploch + výkon, který ploška sama vyzařuje}
 \end{itemize}

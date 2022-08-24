@@ -42,7 +42,7 @@ Mezi nejpoužívanější \textbf{metriky} na Euklidovském prostoru $\mathbb{R}
 K určení vzdálenosti mezi textovými řetězci definujeme tyto \textbf{vzdálenosti}:
 \begin{enumerate}
     \item \textbf{Hammingova} -- počet rozdílných písmen na stejných pozicích: $d_h(\textrm{Karolin, Kathrin}) = 3$, lze použít pouze pro \textbf{stejně dlouhá slova!}.
-    \item \textbf{LCS (Longest common subsequence)} -- počet operací \textbf{vkládání} a \textbf{mazání} nutných k převodu jednoho slova na druhé: $d_{\textrm{LCS}	}(\textrm{kitten, sitting}) \Rightarrow \textrm{itten [-K]} \rightarrow \textrm{sitten [+S]} \rightarrow \textrm{sittn [-E]} \rightarrow \textrm{sittin [+I]} \rightarrow \textrm{sitting [+G]} =$ \textbf{5 operací}.
+    \item \textbf{LCS (Longest common subsequence)} -- počet operací \textbf{vkládání} a \textbf{mazání} nutných k převodu jednoho slova na druhé: $d_{\textrm{LCS}  }(\textrm{kitten, sitting}) \Rightarrow \textrm{itten [-K]} \rightarrow \textrm{sitten [+S]} \rightarrow \textrm{sittn [-E]} \rightarrow \textrm{sittin [+I]} \rightarrow \textrm{sitting [+G]} =$ \textbf{5 operací}.
     \item \textbf{Levenshteinova} -- počet operací \textbf{vkládání}, \textbf{mazání}, \textbf{substituce}  nutných k převodu jednoho slova na druhé: $d_l(\textrm{kittne, sitting}) \Rightarrow \textrm{sitten [K }\sim \textrm{ S]} \rightarrow \textrm{sittin [E }\sim \textrm{ I]} \rightarrow \textrm{sitting [+G]} =$ \textbf{3 operace}.
 \end{enumerate}
 \textbf{Editační vzdálenost} patří zde LSC a Levenstheinova vzdálenost (při určení se používají úpravy).

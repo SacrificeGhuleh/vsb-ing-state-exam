@@ -12,7 +12,7 @@ Mají popis a řízení DDBS soustředěno na \textbf{1 centrální počítač}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{assets/ddbs1.png}
+  \includegraphics[width=0.5\textwidth]{assets/ddbs1.png}
 \end{figure}
 
 \subsection{Decentralizované}
@@ -24,14 +24,14 @@ Jsou tvořeny počítačovou sítí, kde žádný uzel nemá privilegované post
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{assets/ddbs2.png}
+  \includegraphics[width=0.5\textwidth]{assets/ddbs2.png}
 \end{figure}
 \section{Rozmístění dat (fragmentace a replikace)}
 U DDBS jsou nejvíce časově náročné operace přesunu dat po komunikační lince. Vzhledem k vyšší možnosti poruch je třeba relace ukládat tak, aby jejich \textbf{dostupnost byla zajištěna} i v případě výpadku části sítě. Relací zde rozumíme logický celek, ale fyzicky i více souborů. Používají se \textbf{2 hlavní způsoby} fyzické implementace:
 \begin{itemize}
   \item \textbf{Replikace} -- (přítomnost duplicitních dat) \textbf{uchovávání kopií relací v různých uzlech}, \textbf{porucha uzlu neznemožní přístup k relaci} (díky tomu se dist. databáze i samozálohuje), problém je v aktualizaci všech kopií relací. Proto se v DDBS ukládají v kopiích ta data, ke kterým je třeba \textbf{rychlý přístup} a nejsou často aktualizována a jsou velmi důležitá.
   \item \textbf{Fragmentace} --  znamená \textbf{rozložení relací na menší části} (fragmenty), které jsou umístěny v různých
-        uzlech sítě. Může jít o \textbf{horizontální} fragmentaci, kdy se v různých uzlech sítě ukládají části relace rozložené do skupin řádků nebo \textbf{vertikální} fragmentaci, kdy se v různých uzlech ukládají různé	projekce relací. Fragmentace se provádí, aby se \textbf{původní relace získala zpět standardními operacemi nad relační databází (sjednocení, spojení)}.
+        uzlech sítě. Může jít o \textbf{horizontální} fragmentaci, kdy se v různých uzlech sítě ukládají části relace rozložené do skupin řádků nebo \textbf{vertikální} fragmentaci, kdy se v různých uzlech ukládají různé  projekce relací. Fragmentace se provádí, aby se \textbf{původní relace získala zpět standardními operacemi nad relační databází (sjednocení, spojení)}.
 \end{itemize}
 Obě metody se často kombinují tak, že se v distribuované bázi uchovávají kopie fragmentů v různých uzlech.
 V distribuované databázi musí být unikátní jména všech položek. Tedy ani 2 lokální položky nesmí používat

@@ -27,7 +27,7 @@ Rodina protokolů TCP/IP (Transmission Control Protocol/Internet Protocol) obsah
     \item \textbf{Aplikační vrstva }(Application layer)
 \end{enumerate}
 
-\noindent\makebox[\textwidth]{\includegraphics[width=\textwidth]{assets/4_tcpip}}
+\noindent\makebox[\textwidth]{\includegraphics[width=.6\textwidth]{assets/4_tcpip}}
 
 Komunikace mezi \textbf{stejnými vrstvami dvou různých systémů} je řízena \textbf{komunikačním protokolem} za použití spojení vytvořeného sousední nižší vrstvou. Architektura umožňuje výměnu protokolů jedné vrstvy bez dopadu na ostatní. Příkladem může být možnost komunikace po různých médiích fyzické vrstvy modelu OSI - ethernet (optické vlákno, kroucená dvojlinka, Wi-Fi, sériová linka).
 
@@ -70,7 +70,7 @@ Vytváří \textbf{virtuální okruh} mezi koncovými aplikacemi a zajišťuje t
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{assets/4_tcp}
+    \includegraphics[width=.6\textwidth]{assets/4_tcp}
 \end{figure}
 
 \subsection{UDP (User Datagram Protocol)}
@@ -83,7 +83,7 @@ Poskytuje \textbf{nespolehlivou} transportní službu pro takové aplikace, kter
     \item Hlavička UDP má pouze 4 části (délku, zdrojový/cílový port, checksum)
 \end{itemize}
 
-\noindent\makebox[\textwidth]{\includegraphics[width=14cm]{assets/4_udp}}
+\noindent\makebox[\textwidth]{\includegraphics[width=.6\textwidth]{assets/4_udp}}
 
 \section{Aplikační vrstva}
 Jedná se přímo o programy (procesy), které využívají přenosu dat po síti ke konkrétním službám pro uživatele. Příklady: \textbf{Telnet} (TCP 23), \textbf{FTP} (TCP 20, 21), \textbf{HTTP} (TCP 80), \textbf{DHCP} (TCP/UDP 67, 68), \textbf{DNS} (TCP/UDP 53), \textbf{SSH} (TCP 22), \textbf{SMTP} (TCP/UDP 25), \textbf{POP3} (TCP 110), \textbf{IMAP} (TCP 143).

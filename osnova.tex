@@ -1,0 +1,483 @@
+\documentclass[openany]{book}
+\usepackage[czech]{babel}
+
+\usepackage[fit, breakall]{truncate}
+\usepackage{fancyhdr}
+
+% \usepackage[utf8]{inputenc}
+\usepackage[useregional]{datetime2}
+%\usepackage[T1]{fontenc}
+\usepackage[a4paper, top=1.6cm, bottom=1.6cm, left=2cm, right=2cm]{geometry}
+\usepackage[thinlines]{easytable}
+\usepackage{graphicx}
+\usepackage[ampersand]{easylist}
+% \usepackage{changepage}
+\usepackage{float}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{latexsym}
+\usepackage[unicode=true]{hyperref}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{makecell}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{sectsty}
+\usepackage{xevlna}
+
+\raggedbottom
+
+\chaptertitlefont{\Large}
+
+\graphicspath{{./1_it_mpzz/}{./2_swi/}{./3_dais/}{./4_ps/}{./5_pgo/}}
+
+%\renewcommand{\baselinestretch}{1.2} 
+%\setitemize{itemsep=0pt}
+%\setenumerate{itemsep=0pt}
+
+\newcommand{\hhline}{\Xhline{2\arrayrulewidth}}
+\newcommand{\resline}{\vspace{1.5mm}\hrule\vspace{1.5mm}}
+\setcounter{tocdepth}{0}
+
+\title{Otázky k SZZ\\ING 2021}
+\author{Richard Zvonek}
+
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyhead[LE, RO]{\tiny \truncate{0.9 \textwidth} \leftmark}
+%\fancyhead[RE, LO]{\tiny \truncate{0.47 \textwidth} \rightmark}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0pt}%
+\renewcommand{\footrulewidth}{0.4pt}}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE, RO]{\tiny \truncate{0.47 \textwidth} \leftmark}
+\fancyhead[RE, LO]{\tiny \truncate{0.47 \textwidth} \rightmark}
+\fancyfoot[LE,RO]{\thepage}
+
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+  {\noindent\raggedright\normalfont% Alignment and font reset
+   \Large\bfseries\thechapter~~#1\par\nobreak}% Formatting
+  \vspace{\baselineskip}% ...just a little space
+}
+
+
+\begin{document}
+\tableofcontents
+
+\chapter{Počítačová grafika a analýza obrazu}
+\section{Systémy barev v počítačové grafice, nelinearita grafického výstupu (gamma korekce), kompozice rastrových obrazů (alfa kanál), HDR.}
+
+\section{Afinní a projektivní prostor. Afinní a projektivní transformace a jejich matematický zápis. Modelovací a zobrazovací transformace v počítačové grafice.}
+
+\section{Metody získávání fotorealistických obrazů, rekurzivní sledování paprsku, radiometrie, zobrazovací rovnice, Monte Carlo přístupy ve výpočtu osvětlení, urychlovací metody.}
+
+\section{Standardní zobrazovací řetězec a realizace jeho jednotlivých kroků, modely osvětlení a stínovací algoritmy, řešení viditelnosti, možnosti výpočtu globálního osvětlení v reálném čase, stručná charakteristika standardu OpenGL.}
+
+\section{Komprese obrazu a videa, principy úprav obrazu v prostorové a frekvenční doméně.}
+
+\section{Základní metody úpravy a segmentace obrazu (filtrace, prahování, hrany, oblasti, rohy).}
+
+\section{Základní metody rozpoznávání objektů, příznakové rozpoznávání. Univerzální příznaky pro rozpoznávání (např. HOG), trénovací klasifikátory (např. SVM).}
+
+\section{Hluboké neuronové sítě (např. konvoluční, popis jednotlivých vrstev).}
+
+\section{Rekonstrukce 3D objektů z 2D obrazů (základní principy).}
+
+\chapter{Matematické základy informatiky}
+
+\section{Konečné automaty, regulární výrazy, uzávěrové vlastnosti třídy regulárních jazyků.}
+\subsection{Konečný automat}
+\begin{itemize}
+    \item Výpočetní model, přijímá nebo zamítá slova reg. jazyka
+    \item Znázornění tabulkou, grafem, stromem
+    \item Deterministický
+    \begin{itemize}
+        \item Definován uspořádanou pěticí
+        \begin{itemize}
+            \item Množina stavů
+            \item Množina vstupních symbolů - abeceda
+            \item Přechodová funkce 
+            \begin{itemize}
+                \item Vrací jeden stav
+            \end{itemize}
+            \item Počáteční stav
+            \item Množina koncových (přijímajících) stavů 
+        \end{itemize}
+    \end{itemize}
+    \item Nedeterministický
+    \begin{itemize}
+        \item Definován uspořádanou pěticí
+        \begin{itemize}
+            \item Množina stavů
+            \item Množina vstupních symbolů - abeceda
+            \item Přechodová funkce
+            \begin{itemize}
+                \item Vrací množinu stavů
+            \end{itemize}
+            \item Množina počátečních stavů
+            \item Množina koncových (přijímajících) stavů 
+        \end{itemize}
+        \item Na rozdíl od deterministického
+        \begin{itemize}
+            \item Z jednoho stavu libovolný počet přechodů se stejným symbolem
+            \item Nemusí ošetřovat všechny varianty
+            \item Slovo přijímá, pokud existuje alespoň jeden výpočet vedoucí k přijetí
+            \item Může mít více než jeden počáteční stav
+            \item Lze ho převést na deterministický (až \(2^n\) stavů v převedeném)
+        \end{itemize}
+    \end{itemize}
+    \item Zobecněný nedeterministický
+    \begin{itemize}
+        \item Nedeterministický \(+\) nulové \(\epsilon\) (epsilon) přechody
+    \end{itemize} 
+\end{itemize}
+
+\subsection{Regulární výraz}
+\begin{itemize}
+    \item Řetězec, popisující celou množinu řetězců (regulární jazyk)
+    \item Popisuje také konečný automat
+    \item Znaky abecedy, operace sjednocení, zřetězení a iterace.
+    \item Obsahuje prázdné slovo \(\epsilon\) a prázdný jazyk \(\emptyset\)
+\end{itemize}
+
+\subsection{Uzávěrové vlastnosti třídy regulárních jazyků}
+\begin{itemize}
+    \item Uzavřenost -- Výsledek operace s prvky množiny bude opět spadat do dané množiny
+    \item Regulární výrazy uzavřené vůči
+    \begin{itemize}
+        \item Sjednocení, průnik, doplněk
+        \item Zřetězení, iterace
+        \item Zrcadlový obraz
+    \end{itemize}
+\end{itemize}
+
+\section{Bezkontextové gramatiky a jazyky. Zásobníkové automaty, jejich vztah k bezkontextovým gramatikám.}
+
+\subsection{Bezkontextové gramatiky}
+\begin{itemize}
+    \item Definováno jako čtveřice
+    \begin{itemize}
+        \item Množina neterminálů
+        \begin{itemize}
+            \item Neterminály = proměnné
+        \end{itemize}
+        \item Množina terminálů
+        \begin{itemize}
+            \item Terminály = Konstanty
+        \end{itemize}
+        \item Počáteční neterminál
+        \item Přepisovací pravidla
+        \begin{itemize}
+            \item Definují přepisování neterminálů
+            \item Když není co přepisovat \(\rightarrow\) slovo, tvořené pouze neterminály
+        \end{itemize}
+    \end{itemize} 
+    \item Přijímáno zásobníkovým automatem
+    \item Uzavřeno na sjednocení, zřetězení, iteraci a zrcadlový obraz
+    \item Derivace slova -- Konkrétní odvození slova z gramatiky
+    \begin{itemize}
+        \item Levá -- Přepisují se neterminály zleva
+        \item Pravá -- Přepisují se neterminály zprava
+    \end{itemize}
+    \item Derivační strom -- Grafické znázornění derivace slova stromem
+    \item Chomského normální forma
+    \begin{itemize}
+        \item Neterminál \(\rightarrow\) neterminál \(\left( A \rightarrow BC \right))\)
+        \item Neterminál \(\rightarrow\) terminál \(\left( A \rightarrow ab \right))\)
+        \item Neterminál \(\rightarrow\) epsilon \(\left( A \rightarrow \epsilon \right))\)
+    \end{itemize}
+    \item Nevypouštějící gramatika
+    \begin{itemize}
+        \item Neobsahuje epsilon
+    \end{itemize}
+\end{itemize}
+
+\subsection{Zásobníkový automat}
+\begin{itemize}
+    \item V podstatě nedeterministický konečný automat rozšířený o zásobník
+    \item Díky zásobníku si pamatuje, kolik a jaké znaky přečetl
+    \item Slovo přijme, pokud přečetl celé slovo a zásobní je prázdný
+\end{itemize}
+
+\section{Matematické modely algoritmů -Turingovy stroje a stroje RAM. Složitost algoritmu, asymptotické odhady. Algoritmicky nerozhodnutelné problémy.}
+
+\begin{itemize}
+    \item Snaha popsat libovolný algoritmus \(\rightarrow\) Turingův a RAM stroj
+    \item Teoretické modely univerzálních počítačů, programovacích jazyků
+\end{itemize}
+
+\subsection{Turingův stroj}
+\begin{itemize}
+    \item Oboustranně nekonečná páska obsahující vstupní slovo
+    \item Čtení i zápis pomocí hlavy
+    \item Pohyb po pásce oběma směry
+    \item Pracuje s celou abecedou
+    \item Turingovská úplnost
+    \begin{itemize}
+        \item Stroj, počítač, programovací jazyk, úloha\dots
+        \item Lze v něm odsimulovat libovolný jiný Turingův stroj
+        \item Má stejnou výpočetní sílu jako Turingův stroj
+    \end{itemize}
+    \item Church-Turingova teze
+    \begin{itemize}
+        \item Ke každému algoritmu existuje ekvivalentní Turingův stroj
+    \end{itemize}
+\end{itemize}
+
+\subsection{RAM stroj}
+\begin{itemize}
+    \item Model vycházející ze skutečných počítačů
+    \item Slouží zejména k analýze algoritmů
+    \begin{itemize}
+        \item Paměťová, časová složitost
+    \end{itemize}
+    \item Skládá se z:
+    \begin{itemize}
+        \item Programová jednotka
+        \begin{itemize}
+            \item Konečná posloupnost instrukcí \(\rightarrow\) program
+        \end{itemize}
+        \item Pracovní paměť
+        \begin{itemize}
+            \item Uspořádaná paměť
+            \item Zápis celých čísel
+            \item Indexace přirozenými čísly
+            \begin{itemize}
+                \item 0 \(\rightarrow\) Pracovní registr
+                \item 1 \(\rightarrow\) Indexový registr
+            \end{itemize}
+        \end{itemize}
+        \item Vstupní a výstupní páska
+        \begin{itemize}
+            \item Sekvenční zápis/čtení celých čísel
+        \end{itemize}
+        \item Centrální jednotka
+        \begin{itemize}
+            \item Programový registr
+            \item Ukazatel na instrukci
+            \item Inkrementace ukazatelu po provedení instrukce
+            \begin{itemize}
+                \item O 1 nebo o více v případě skoku
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\subsection{Složitost algoritmů}
+\begin{itemize}
+    \item Pro srovnávání algoritmů řešících stejný problém
+    \item Obecně, čím nižší, tím lepší
+    \item Časová složitost
+    \begin{itemize}
+        \item Jak závisí doba vykonávání na množství vstupních dat
+    \end{itemize}
+    \item Prostorová složitost
+    \begin{itemize}
+        \item Jak závisí potřebná paměť na množství vstupních dat
+    \end{itemize}
+    \item Neudávají se konkrétní čísla, udává se funkce závislá na vstupních datech
+    \begin{itemize}
+        \item Získáno simulací na RAM stroji
+        \item Počítání instrukcí pro nejhorší možný vstup
+    \end{itemize}
+    \item Používá se asymptotická notace
+    \begin{itemize}
+        \item \(\mathcal{O}\left( f \right)\) --  Horní ohraničení -- Roste nejvýše tak rychle jako \(f\)
+        \item \(\Theta\left( f \right)\) -- Roste stejně rychle jako  \(f\)
+        \item \(\Omega\left( f \right)\) -- Dolní ohraničení -- Roste rychleji než \(f\)
+        \item \(\mathcal{!}\) Zanedbávají se konstanty
+        \item \(\mathcal{!}\) Analyzuje se nejhorší případ
+        \begin{itemize}
+            \item Relevantní může být spíše typický příklad
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\subsection{Rozhodnutelnost problémů}
+\begin{itemize}
+    \item Problém je rozhodnutelný, pokud existuje turingův stroj, který jej řeší
+    \item Problém není rozhodnutelný, pokud pro daný vstup nenalezne žádný algoritmus výstup
+    \item Ano/Ne problémy
+    \begin{itemize}
+        \item Výstup z algoritmu může být Ano (true) nebo Ne (false)
+        \item Dají se na něj převést všechny probélmy, pokud nepotřebujeme přesný výsledek
+    \end{itemize}
+    \item Riceova věta
+    \begin{itemize}
+        \item Nerozhodnutelná vlastnost, pokud je netriviální a vstupně/výstupní
+        \item Triviální vlastnost
+        \begin{itemize}
+            \item Mají ji všechny programy nebo ji nemá žádný program 
+            \item Triviální vlastnost je vždy vstupně/výstupní
+        \end{itemize}
+        \item Vstupně/výstupní vlastnost
+        \begin{itemize}
+            \item Pokud dva programy se stejnou IO tabulkou vlastnost mají nebo ne 
+        \end{itemize}
+    \end{itemize}
+    \item Částečná rozhodnutelnost
+    \begin{itemize}
+        \item Pro očekávaný výstup ANO vrátí ANO
+        \item Pro očekávaný výstup NE vrátí NE nebo se program nezastaví
+    \end{itemize}
+\end{itemize}
+
+\subsection{Algoritmicky nerozhodnutelné problémy}
+\begin{itemize}
+    \item Halting problem
+    \item Ekvivalence bezkontextových gramatik
+    \item Nejednoznačnost bezkontextové gramatiky
+\end{itemize}
+
+\section{Třídy složitosti problémů. Třída PTIME a NPTIME, NP-úplné problémy.}
+\subsection{Třída PTIME}
+\begin{itemize}
+    \item Rozhodovací (Ano/Ne) problémy
+    \item Problémy, které lze řešit v polynomiálním čase
+    \item Problémy v PTIME jsou prakticky zvládnutelné
+\end{itemize}
+\subsection{Třída NPTIME}
+\begin{itemize}
+    \item Rozhodovací (Ano/Ne) problémy
+    \item Problémy, které lze řešit v polynomiálním čase \textbf{nedeterministickými algoritmy}
+    \begin{itemize}
+        \item Pro Ano stačí najít jedno řešení
+        \item Pro Ne je třeba důkaz, že žádné řešení nevrací Ano
+    \end{itemize}
+\end{itemize}
+\subsection{NP-těžký problém}
+\begin{itemize}
+    \item Problém, na který lze převést každý problém z NPTIME v polynomiálním čase 
+\end{itemize}
+\subsection{NP-úplné problémy}
+\begin{itemize}
+    \item Problémy, patřící do NPTIME a zároveň jsou NP-těžké
+\end{itemize}
+
+
+\section{Jazyk predikátové logiky prvního řádu. Práce s kvantifikátory a ekvivalentní transformace formulí.}
+
+\section{Pojem relace, operace s relacemi, vlastnosti relací. Typy binárních relací. Relace ekvivalence a relace uspořádání.}
+
+\section{Pojem operace a obecný pojem algebra. Algebry s jednou a dvěma binárními operacemi.}
+
+\section{FCA – formální kontext, formální koncept, konceptuální svazy.}
+
+\section{Asociační pravidla, hledání často se opakujících množin položek.}
+
+\section{Metrické a topologické prostory – metriky a podobnosti.}
+
+\section{Shlukování}
+
+\section{Náhodná veličina. Základní typy náhodných veličin. Funkce určující rozdělení náhodných veličin.}
+
+\section{Vybraná rozdělení diskrétní a spojité náhodné veličiny - binomické, hypergeometrické, negativně binomické, Poissonovo, exponenciální, Weibullovo, normální rozdělení.}
+
+\section{Popisná statistika. Číselné charakteristiky a vizualizace kategoriálních a kvantitativních proměnných.}
+
+\section{Metody statistické indukce. Intervalové odhady. Princip testování hypotéz.}
+
+\chapter{Softwarové inženýrství}
+
+\section{Softwarový proces. Jeho definice, modely a úrovně vyspělosti.}
+
+\section{Vymezení fáze „sběr a analýza požadavků“. Diagramy UML využité v dané fázi.}
+
+\section{Vymezení fáze „Návrh“. Diagramy UML využité v dané fázi. Návrhové vzory – členění, popis a příklady. }
+
+\section{Objektově orientované paradigma. Pojmy třída, objekt, rozhraní. Základní vlastnosti objektu a vztah ke třídě. Základní vztahy mezi třídami a rozhraními. Třídní vs. instanční vlastnosti.}
+
+\section{Mapování UML diagramů na zdrojový kód.}
+
+\section{Správa paměti(v jazycích C/C++, Java , C\#, Python), virtuální stroj, podpora paralelního zpracování a vlákna.}
+
+\section{Zpracování chyb v moderních programovacích jazycích, princip datových proudů – pro vstup a výstup. Rozdíl mezi znakově a bytově orientovanými datovými proudy.}
+
+\section{Jazyk UML – typy diagramů a jejich využití v rámci vývoje.}
+
+\chapter{Databázové a informační systémy}
+
+\section{Modelování databázových systémů, konceptuální modelování, datová analýza, funkční analýza; nástroje a modely. }
+
+\section{Relační datový model, SQL; funkční závislosti, dekompozice a normální formy.}
+
+\section{Transakce, zotavení, log, ACID, operace COMMIT a ROLLBACK; problémy souběhu, řízení souběhu: zamykání, úroveň izolacev SQL.}
+
+\section{Procedurální rozšíření SQL, PL/SQL, T-SQL, triggery, funkce, procedury, kurzory, hromadné operace.}
+
+\section{Základní fyzická implementace databázových systémů: tabulky a indexy; plán vykonávání dotazů.}
+\begin{itemize}
+    \item Tabulkuy
+    \item Indexy
+    \item Materializované pohledy
+    \item Rozdělení dat
+\end{itemize}
+\subsection{Tabulky}
+\begin{itemize}
+    \item Heap Table
+    \begin{itemize}
+        \item Implicitní
+        \item Záznamy neuspořádány
+        \item Rychlé vkládání, pomalé hledání
+        \item Záznamy se označí jako smazané, fyzicky se mažou operací shrinking
+    \end{itemize}
+    \item B-Strom
+    \begin{itemize}
+        \item Pomalejší vkládání (je třeba třídit), rychlé vyhledávání
+        \item Je možné určit, co bude ve stromu a co na haldě
+    \end{itemize}
+    \item Hash table
+    \begin{itemize}
+        \item Záznamy s podobnou hash hodnotou uloženy u sebe
+        \item Plýtvá místem
+        \item Je třeba znát přibližnou velikost dat
+    \end{itemize}
+\end{itemize}
+
+\subsection{Indexy}
+\begin{itemize}
+    \item Umožňuje uložení klíčů a ROWID, rychlejší přístup k datům
+\end{itemize}
+\subsection{Plán vykonávání dotazů}
+\begin{itemize}
+    \item 3 fáze
+    \begin{enumerate}
+        \item Převod dotazu do interní formy
+        \item Převod do kanonické formy
+        \begin{itemize}
+            \item Optimalizace dotazu
+        \end{itemize}
+        \item Vygenerování plánů dotazů a výběr nejlevnějšího plánu
+        \begin{itemize}
+            \item Generování jednotlivých variant, ohodnocení, výběr nejlepší varianty
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
+
+\section{Objektově‐relační datový model a XML datový model: principy, dotazovací jazyky.}
+
+\section{Datová vrstva informačního systému; existující API, rámce a implementace, bezpečnost; objektově-relační mapování.}
+
+\section{Distribuované SŘBD, fragmentace a replikace.}
+
+\chapter{Počítače a sítě}
+\section{Architektura univerzálních procesorů. Principy urychlování činnosti procesorů. }
+
+\section{Základní vlastnosti monolitických počítačů a jejich typické integrované periférie. Možnosti použití. }
+
+\section{Protokolová rodina TCP/IP. }
+
+\section{Metody sdíleného přístupu ke společnému kanálu. }
+
+\section{Problémy směrování v počítačových sítích. Adresování v IP, překlad adres (NAT). }
+
+\section{Bezpečnost počítačových sítí s TCP/IP: útoky, paketové filtry, stavový firewall. Šifrování a autentizace, virtuální privátní sítě.  }
+
+\end{document}
